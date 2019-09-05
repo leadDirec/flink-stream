@@ -2,6 +2,7 @@ package com.wallstcn.models;
 
 public class LogEntity {
     Integer userId;
+    Long timeStamp; //事件发生时间
 
     public Integer getUserId() {
         return userId;
@@ -9,6 +10,15 @@ public class LogEntity {
 
     public void setUserId(Integer userId) {
         this.userId = userId;
+    }
+
+
+    public Long getTimeStamp() {
+        return timeStamp;
+    }
+
+    public void setTimeStamp(Long timeStamp) {
+        this.timeStamp = timeStamp;
     }
 
     public static LogEntity getUserLog(String value) {
@@ -19,6 +29,7 @@ public class LogEntity {
         }
         LogEntity log = new LogEntity();
         log.setUserId(Integer.parseInt(values[0]));
+        log.setTimeStamp(Long.parseLong(values[1]));
         return log;
     }
 }

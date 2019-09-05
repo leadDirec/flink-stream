@@ -1,7 +1,7 @@
 package com.wallstcn.app;
 
-import com.wallstcn.transformation.LogEntityFilterFunction;
-import com.wallstcn.transformation.LogEntityMapFuntion;
+import com.wallstcn.models.LogEntity;
+import com.wallstcn.transformation.*;
 import com.wallstcn.util.Property;
 import org.apache.flink.api.common.serialization.SimpleStringSchema;
 import org.apache.flink.streaming.api.CheckpointingMode;
@@ -9,6 +9,7 @@ import org.apache.flink.streaming.api.TimeCharacteristic;
 import org.apache.flink.streaming.api.datastream.DataStream;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 import org.apache.flink.streaming.api.windowing.time.Time;
+import org.apache.flink.streaming.api.windowing.triggers.EventTimeTrigger;
 import org.apache.flink.streaming.connectors.kafka.FlinkKafkaConsumer010;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,10 +18,10 @@ public class UserPortrait {
 
     private static final Logger logger = LoggerFactory.getLogger(UserPortrait.class);
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws Exception {
 
         StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
-        env.enableCheckpointing(1000, CheckpointingMode.AT_LEAST_ONCE);
+        env.enableCheckpointing(1000, CheckpointingMode.EXACTLY_ONCE);
         env.setStreamTimeCharacteristic(TimeCharacteristic.EventTime);
 
         FlinkKafkaConsumer010<String> consumer = new FlinkKafkaConsumer010<>(Property.getKafkaTopics(), new SimpleStringSchema(), Property.getKafkaProperties());
@@ -36,7 +37,12 @@ public class UserPortrait {
         DataStream<String> transction = env.addSource(consumer).setParallelism(parallelism);
         transction.map(new LogEntityMapFuntion()).setParallelism(parallelism)
                 .filter(new LogEntityFilterFunction()).setParallelism(parallelism)
-                .keyBy(0)
-                .timeWindow(Time.days(6),Time.days(1)).trigger().evictor().apply();
+                .assignTimestampsAndWatermarks(new LogTimeStampPeriodExtractor())
+                .keyBy(LogEntity::getUserId)
+                .timeWindow(Time.days(6),Time.days(1))
+                .trigger(new LogEntitytrigger())
+//                .evictor(new LogEntityEvictor())
+                .apply();
+        env.execute("User Portrait");
     }
 }
