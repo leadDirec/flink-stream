@@ -6,6 +6,8 @@ import com.wallstcn.util.connection.ConnectionPoolBase;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.hbase.HBaseConfiguration;
 import org.apache.hadoop.hbase.client.Connection;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.Properties;
 
@@ -17,6 +19,8 @@ public class HBaseConnectionPool extends ConnectionPoolBase<Connection>  impleme
      * serialVersionUID
      */
     private static final long serialVersionUID = -9126420905798370243L;
+
+    private static final Logger logger = LoggerFactory.getLogger(HBaseConnectionPool.class);
 
     private static HBaseConnectionPool pool;
 
@@ -35,6 +39,7 @@ public class HBaseConnectionPool extends ConnectionPoolBase<Connection>  impleme
         hbaseConfig.set("hbase.rpc.timeout", Property.getValue("hbase.rpc.timeout"));
 
         pool = new HBaseConnectionPool(config, hbaseConfig);
+        logger.debug("HBaseConnectionPool initial success");
     }
 
     public static Connection get() {

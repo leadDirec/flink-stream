@@ -3,10 +3,14 @@ package com.wallstcn.redis;
 import com.wallstcn.util.Property;
 import com.wallstcn.util.connection.ConnectionPool;
 import com.wallstcn.util.connection.ConnectionPoolBase;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPoolConfig;
 
 public class RedisPool extends ConnectionPoolBase<Jedis> implements ConnectionPool<Jedis> {
+
+    private static final Logger logger = LoggerFactory.getLogger(RedisPool.class);
 
     private static RedisPool pool;
 
@@ -27,6 +31,7 @@ public class RedisPool extends ConnectionPoolBase<Jedis> implements ConnectionPo
         config.setTestOnBorrow(Property.getBooleanValue("redis.pool.testOnBorrow"));
         config.setTestOnReturn(Property.getBooleanValue("redis.pool.testOnReturn"));
         pool = new RedisPool(config,Property.getValue("redis.host"),Property.getIntValue("redis.port"),Property.getIntValue("redis.timeout"));
+        logger.debug("RedisPool initial success");
     }
 
     public static Jedis get() {
