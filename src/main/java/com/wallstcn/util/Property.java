@@ -62,11 +62,11 @@ public class Property {
         return Integer.parseInt(strValue);
     }
 
-    public static Properties getKafkaProperties(String groupId) {
+    public static Properties getKafkaProperties() {
         Properties properties = new Properties();
         properties.setProperty("bootstrap.servers", getValue("kafka.bootstrap.servers"));
         properties.setProperty("zookeeper.connect", getValue("kafka.zookeeper.connect"));
-        properties.setProperty("group.id", groupId);
+        properties.setProperty("group.id", getValue("kafka.group.id"));
         return properties;
     }
 
