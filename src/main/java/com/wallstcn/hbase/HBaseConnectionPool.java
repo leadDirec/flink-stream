@@ -1,8 +1,10 @@
 package com.wallstcn.hbase;
 
+import com.wallstcn.util.Property;
 import com.wallstcn.util.connection.ConnectionPool;
 import com.wallstcn.util.connection.ConnectionPoolBase;
 import org.apache.hadoop.conf.Configuration;
+import org.apache.hadoop.hbase.HBaseConfiguration;
 import org.apache.hadoop.hbase.client.Connection;
 
 import java.util.Properties;
@@ -15,6 +17,29 @@ public class HBaseConnectionPool extends ConnectionPoolBase<Connection>  impleme
      * serialVersionUID
      */
     private static final long serialVersionUID = -9126420905798370243L;
+
+    private static HBaseConnectionPool pool;
+
+    static {
+        HBaseConnectionPoolConfig config = new HBaseConnectionPoolConfig();
+        config.setMaxTotal(20);
+        config.setMaxIdle(5);
+        config.setMaxWaitMillis(1000);
+        config.setTestOnBorrow(true);
+
+        Configuration hbaseConfig = HBaseConfiguration.create();
+        hbaseConfig.set("hbase.zookeeper.quorum", Property.getValue("hbase.zookeeper.quorum"));
+        hbaseConfig.set("hbase.defaults.for.version.skip", "true");
+        hbaseConfig.set("hbase.rootdir", Property.getValue("hbase.rootdir"));
+        hbaseConfig.set("hbase.client.scanner.timeout.period", Property.getValue("hbase.client.scanner.timeout.period"));
+        hbaseConfig.set("hbase.rpc.timeout", Property.getValue("hbase.rpc.timeout"));
+
+        pool = new HBaseConnectionPool(config, hbaseConfig);
+    }
+
+    public static Connection get() {
+        return pool.getConnection();
+    }
 
     /**
      * <p>Title: HbaseConnectionPool</p>

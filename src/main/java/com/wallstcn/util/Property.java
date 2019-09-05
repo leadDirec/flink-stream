@@ -63,6 +63,11 @@ public class Property {
         return Integer.parseInt(strValue);
     }
 
+    public static boolean getBooleanValue(String key) {
+        String strValue = getValue(key);
+        return Boolean.parseBoolean(strValue);
+    }
+
     public static Properties getKafkaProperties() {
         Properties properties = new Properties();
         properties.setProperty("bootstrap.servers", getValue("kafka.bootstrap.servers"));

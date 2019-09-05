@@ -1,5 +1,6 @@
 package com.wallstcn.redis;
 
+import com.wallstcn.util.Property;
 import com.wallstcn.util.connection.ConnectionPool;
 import com.wallstcn.util.connection.ConnectionPoolBase;
 import redis.clients.jedis.Jedis;
@@ -7,13 +8,29 @@ import redis.clients.jedis.JedisPoolConfig;
 
 public class RedisPool extends ConnectionPoolBase<Jedis> implements ConnectionPool<Jedis> {
 
+    private static RedisPool pool;
+
     private static final long serialVersionUID = -9126420905798370249L;
 
-    //把redis连接对象放到本地线程中
     private static ThreadLocal<Jedis> local=new ThreadLocal<>();
 
     public RedisPool(final JedisPoolConfig poolConfig, final String host, int port, int timeOut) {
         super(poolConfig, new RedisConnectionFactory(host,port,timeOut));
+    }
+
+    static {
+        JedisPoolConfig config = new JedisPoolConfig();
+        // 设置池配置项值
+        config.setMaxTotal(Property.getIntValue("redis.pool.maxActive"));
+        config.setMaxIdle(Property.getIntValue("redis.pool.maxIdle"));
+        config.setMaxWaitMillis(Property.getIntValue("redis.pool.maxWait"));
+        config.setTestOnBorrow(Property.getBooleanValue("redis.pool.testOnBorrow"));
+        config.setTestOnReturn(Property.getBooleanValue("redis.pool.testOnReturn"));
+        pool = new RedisPool(config,Property.getValue("redis.host"),Property.getIntValue("redis.port"),Property.getIntValue("redis.timeout"));
+    }
+
+    public static Jedis get() {
+        return pool.getConnection();
     }
 
     @Override
