@@ -13,7 +13,7 @@ public class Property {
 
     private static final String envKey = "CONFIGOR_ENV";
 
-    private static final Logger LOG = LoggerFactory.getLogger(Property.class);
+    private static final Logger logger = LoggerFactory.getLogger(Property.class);
 
     private final static String CONF_NAME = ".config.properties";
 
@@ -26,10 +26,10 @@ public class Property {
             InputStreamReader inputStreamReader = new InputStreamReader(in, "UTF-8");
             contextProperties.load(inputStreamReader);
         } catch (IOException e) {
-            LOG.debug(">>>userportrait<<<资源文件加载失败!");
+            logger.debug(">>>userportrait<<<资源文件加载失败!");
             e.printStackTrace();
         }
-        LOG.debug(">>>userportrait<<<资源文件加载成功");
+        logger.debug(">>>userportrait<<<资源文件加载成功");
     }
 
 //    public static String getEnvConf(String jvmKey, String key) {

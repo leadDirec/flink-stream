@@ -79,15 +79,13 @@ under the License.
 		<!-- These dependencies are excluded from the application JAR by default. -->
 		<dependency>
 			<groupId>org.slf4j</groupId>
-			<artifactId>slf4j-log4j12</artifactId>
-			<version>1.7.7</version>
-			<scope>runtime</scope>
+			<artifactId>slf4j-api</artifactId>
+			<version>1.7.21</version>
 		</dependency>
 		<dependency>
-			<groupId>log4j</groupId>
-			<artifactId>log4j</artifactId>
-			<version>1.2.17</version>
-			<scope>runtime</scope>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-log4j12</artifactId>
+			<version>1.7.21</version>
 		</dependency>
 	</dependencies>
 
@@ -121,10 +119,10 @@ under the License.
 						<configuration>
 							<artifactSet>
 								<excludes>
-									<exclude>org.apache.flink:force-shading</exclude>
-									<exclude>com.google.code.findbugs:jsr305</exclude>
-									<exclude>org.slf4j:*</exclude>
-									<exclude>log4j:*</exclude>
+									<!--<exclude>org.apache.flink:force-shading</exclude>-->
+									<!--<exclude>com.google.code.findbugs:jsr305</exclude>-->
+									<!--<exclude>org.slf4j:*</exclude>-->
+									<!--<exclude>log4j:*</exclude>-->
 								</excludes>
 							</artifactSet>
 							<filters>
@@ -150,55 +148,55 @@ under the License.
 			</plugin>
 		</plugins>
 
-		<pluginManagement>
-			<plugins>
+		<!--<pluginManagement>-->
+			<!--<plugins>-->
 
-				<!-- This improves the out-of-the-box experience in Eclipse by resolving some warnings. -->
-				<plugin>
-					<groupId>org.eclipse.m2e</groupId>
-					<artifactId>lifecycle-mapping</artifactId>
-					<version>1.0.0</version>
-					<configuration>
-						<lifecycleMappingMetadata>
-							<pluginExecutions>
-								<pluginExecution>
-									<pluginExecutionFilter>
-										<groupId>org.apache.maven.plugins</groupId>
-										<artifactId>maven-shade-plugin</artifactId>
-										<versionRange>[3.0.0,)</versionRange>
-										<goals>
-											<goal>shade</goal>
-										</goals>
-									</pluginExecutionFilter>
-									<action>
-										<ignore/>
-									</action>
-								</pluginExecution>
-								<pluginExecution>
-									<pluginExecutionFilter>
-										<groupId>org.apache.maven.plugins</groupId>
-										<artifactId>maven-compiler-plugin</artifactId>
-										<versionRange>[3.1,)</versionRange>
-										<goals>
-											<goal>testCompile</goal>
-											<goal>compile</goal>
-										</goals>
-									</pluginExecutionFilter>
-									<action>
-										<ignore/>
-									</action>
-								</pluginExecution>
-							</pluginExecutions>
-						</lifecycleMappingMetadata>
-					</configuration>
-				</plugin>
-			</plugins>
-		</pluginManagement>
+				<!--&lt;!&ndash; This improves the out-of-the-box experience in Eclipse by resolving some warnings. &ndash;&gt;-->
+				<!--<plugin>-->
+					<!--<groupId>org.eclipse.m2e</groupId>-->
+					<!--<artifactId>lifecycle-mapping</artifactId>-->
+					<!--<version>1.0.0</version>-->
+					<!--<configuration>-->
+						<!--<lifecycleMappingMetadata>-->
+							<!--<pluginExecutions>-->
+								<!--<pluginExecution>-->
+									<!--<pluginExecutionFilter>-->
+										<!--<groupId>org.apache.maven.plugins</groupId>-->
+										<!--<artifactId>maven-shade-plugin</artifactId>-->
+										<!--<versionRange>[3.0.0,)</versionRange>-->
+										<!--<goals>-->
+											<!--<goal>shade</goal>-->
+										<!--</goals>-->
+									<!--</pluginExecutionFilter>-->
+									<!--<action>-->
+										<!--<ignore/>-->
+									<!--</action>-->
+								<!--</pluginExecution>-->
+								<!--<pluginExecution>-->
+									<!--<pluginExecutionFilter>-->
+										<!--<groupId>org.apache.maven.plugins</groupId>-->
+										<!--<artifactId>maven-compiler-plugin</artifactId>-->
+										<!--<versionRange>[3.1,)</versionRange>-->
+										<!--<goals>-->
+											<!--<goal>testCompile</goal>-->
+											<!--<goal>compile</goal>-->
+										<!--</goals>-->
+									<!--</pluginExecutionFilter>-->
+									<!--<action>-->
+										<!--<ignore/>-->
+									<!--</action>-->
+								<!--</pluginExecution>-->
+							<!--</pluginExecutions>-->
+						<!--</lifecycleMappingMetadata>-->
+					<!--</configuration>-->
+				<!--</plugin>-->
+			<!--</plugins>-->
+		<!--</pluginManagement>-->
 	</build>
 
-	<!-- This profile helps to make things run out of the box in IntelliJ -->
-	<!-- Its adds Flink's core classes to the runtime class path. -->
-	<!-- Otherwise they are missing in IntelliJ, because the dependency is 'provided' -->
+	<!--&lt;!&ndash; This profile helps to make things run out of the box in IntelliJ &ndash;&gt;-->
+	<!--&lt;!&ndash; Its adds Flink's core classes to the runtime class path. &ndash;&gt;-->
+	<!--&lt;!&ndash; Otherwise they are missing in IntelliJ, because the dependency is 'provided' &ndash;&gt;-->
 	<profiles>
 		<profile>
 			<id>add-dependencies-for-IDEA</id>
