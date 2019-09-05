@@ -13,6 +13,7 @@ import java.util.concurrent.atomic.AtomicReference;
 
 /**
  * @author xiangdao
+ * TODO not implement
  */
 public class HBaseSharedConnPool implements ConnectionPool<Connection> { {
 

@@ -1,10 +1,10 @@
-package com.wallstcn.util.connection;
+package com.wallstcn.hbase;
 
 import org.apache.commons.pool2.impl.GenericObjectPoolConfig;
 
 import java.io.Serializable;
 
-public class ConnectionPoolConfig extends GenericObjectPoolConfig implements Serializable{
+public class HBaseConnectionPoolConfig extends GenericObjectPoolConfig implements Serializable{
     /**
      * DEFAULT_TEST_WHILE_IDLE
      */
@@ -30,7 +30,7 @@ public class ConnectionPoolConfig extends GenericObjectPoolConfig implements Ser
      * <p>Title: ConnectionPoolConfig</p>
      * <p>Description: 默认构造方法</p>
      */
-    public ConnectionPoolConfig() {
+    public HBaseConnectionPoolConfig() {
 
         // defaults to make your life with connection pool easier :)
         setTestWhileIdle(DEFAULT_TEST_WHILE_IDLE);

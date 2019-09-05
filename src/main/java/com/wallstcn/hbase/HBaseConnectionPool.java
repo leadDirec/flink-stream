@@ -2,13 +2,13 @@ package com.wallstcn.hbase;
 
 import com.wallstcn.util.connection.ConnectionPool;
 import com.wallstcn.util.connection.ConnectionPoolBase;
-import com.wallstcn.util.connection.ConnectionPoolConfig;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.hbase.client.Connection;
+
 import java.util.Properties;
 
 /**
- * @author xiangdao
+ *
  */
 public class HBaseConnectionPool extends ConnectionPoolBase<Connection>  implements ConnectionPool<Connection> {
     /**
@@ -34,7 +34,7 @@ public class HBaseConnectionPool extends ConnectionPoolBase<Connection>  impleme
      */
     public HBaseConnectionPool(final String host, final String port) {
 
-        this(new ConnectionPoolConfig(), host, port, HBaseConfig.DEFAULT_MASTER, HBaseConfig.DEFAULT_ROOTDIR);
+        this(new HBaseConnectionPoolConfig(), host, port, HBaseConfig.DEFAULT_MASTER, HBaseConfig.DEFAULT_ROOTDIR);
     }
 
     /**
@@ -48,7 +48,7 @@ public class HBaseConnectionPool extends ConnectionPoolBase<Connection>  impleme
      */
     public HBaseConnectionPool(final String host, final String port, final String master, final String rootdir) {
 
-        this(new ConnectionPoolConfig(), host, port, master, rootdir);
+        this(new HBaseConnectionPoolConfig(), host, port, master, rootdir);
     }
 
     /**
@@ -59,7 +59,7 @@ public class HBaseConnectionPool extends ConnectionPoolBase<Connection>  impleme
      */
     public HBaseConnectionPool(final Configuration hadoopConfiguration) {
 
-        this(new ConnectionPoolConfig(), hadoopConfiguration);
+        this(new HBaseConnectionPoolConfig(), hadoopConfiguration);
     }
 
     /**
@@ -70,7 +70,7 @@ public class HBaseConnectionPool extends ConnectionPoolBase<Connection>  impleme
      * @param host       地址
      * @param port       端口
      */
-    public HBaseConnectionPool(final ConnectionPoolConfig poolConfig, final String host, final String port) {
+    public HBaseConnectionPool(final HBaseConnectionPoolConfig poolConfig, final String host, final String port) {
 
         this(poolConfig, host, port, HBaseConfig.DEFAULT_MASTER, HBaseConfig.DEFAULT_ROOTDIR);
     }
@@ -82,7 +82,7 @@ public class HBaseConnectionPool extends ConnectionPoolBase<Connection>  impleme
      * @param poolConfig          池配置
      * @param hadoopConfiguration hbase配置
      */
-    public HBaseConnectionPool(final ConnectionPoolConfig poolConfig, final Configuration hadoopConfiguration) {
+    public HBaseConnectionPool(final HBaseConnectionPoolConfig poolConfig, final Configuration hadoopConfiguration) {
 
         super(poolConfig, new HBaseConnectionFactory(hadoopConfiguration));
     }
@@ -97,7 +97,7 @@ public class HBaseConnectionPool extends ConnectionPoolBase<Connection>  impleme
      * @param master     hbase主机
      * @param rootdir    hdfs目录
      */
-    public HBaseConnectionPool(final ConnectionPoolConfig poolConfig, final String host, final String port, final String master, final String rootdir) {
+    public HBaseConnectionPool(final HBaseConnectionPoolConfig poolConfig, final String host, final String port, final String master, final String rootdir) {
 
         super(poolConfig, new HBaseConnectionFactory(host, port, master, rootdir));
     }
@@ -107,7 +107,7 @@ public class HBaseConnectionPool extends ConnectionPoolBase<Connection>  impleme
      * @param properties 参数配置
      * @since 1.2.1
      */
-    public HBaseConnectionPool(final ConnectionPoolConfig poolConfig, final Properties properties) {
+    public HBaseConnectionPool(final HBaseConnectionPoolConfig poolConfig, final Properties properties) {
 
         super(poolConfig, new HBaseConnectionFactory(properties));
     }

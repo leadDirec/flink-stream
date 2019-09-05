@@ -115,6 +115,11 @@ under the License.
 			<artifactId>hbase-common</artifactId>
 			<version>${hbase.version}</version>
 		</dependency>
+		<dependency>
+			<groupId>redis.clients</groupId>
+			<artifactId>jedis</artifactId>
+			<version>2.9.0</version>
+		</dependency>
 	</dependencies>
 
 	<build>

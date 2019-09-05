@@ -3,10 +3,11 @@ package com.wallstcn.util;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Properties;
 
 public class Property {
@@ -67,7 +68,14 @@ public class Property {
         properties.setProperty("bootstrap.servers", getValue("kafka.bootstrap.servers"));
         properties.setProperty("zookeeper.connect", getValue("kafka.zookeeper.connect"));
         properties.setProperty("group.id", getValue("kafka.group.id"));
+        properties.put("key.deserializer", "org.apache.kafka.common.serialization.StringDeserializer");  //key 反序列化
+        properties.put("value.deserializer", "org.apache.kafka.common.serialization.StringDeserializer");
         return properties;
     }
+
+    public static List<String> getKafkaTopics() {
+        return Arrays.asList(StringUtils.split(Property.getValue("kafka.group.topics"),","));
+    }
+
 
 }
