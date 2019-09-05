@@ -37,6 +37,6 @@ public class UserPortrait {
         transction.map(new LogEntityMapFuntion()).setParallelism(parallelism)
                 .filter(new LogEntityFilterFunction()).setParallelism(parallelism)
                 .keyBy(0)
-                .timeWindow(Time.days(6),Time.days(1));
+                .timeWindow(Time.days(6),Time.days(1)).trigger().evictor().apply();
     }
 }
