@@ -26,10 +26,10 @@ public class Property {
             InputStreamReader inputStreamReader = new InputStreamReader(in, "UTF-8");
             contextProperties.load(inputStreamReader);
         } catch (IOException e) {
-            LOG.debug(">>>flink-2-hbase<<<资源文件加载失败!");
+            LOG.debug(">>>userportrait<<<资源文件加载失败!");
             e.printStackTrace();
         }
-        LOG.debug(">>>flink-2-hbase<<<资源文件加载成功");
+        LOG.debug(">>>userportrait<<<资源文件加载成功");
     }
 
 //    public static String getEnvConf(String jvmKey, String key) {
