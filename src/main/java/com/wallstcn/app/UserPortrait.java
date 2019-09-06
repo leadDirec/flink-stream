@@ -1,10 +1,7 @@
 package com.wallstcn.app;
 
 import com.wallstcn.models.LogEntity;
-import com.wallstcn.transformation.LogEntityFilterFunction;
-import com.wallstcn.transformation.LogEntityMapFuntion;
-import com.wallstcn.transformation.LogEntitytrigger;
-import com.wallstcn.transformation.LogTimeStampPeriodExtractor;
+import com.wallstcn.transformation.*;
 import com.wallstcn.util.Property;
 import org.apache.flink.api.common.serialization.SimpleStringSchema;
 import org.apache.flink.contrib.streaming.state.RocksDBStateBackend;
@@ -64,7 +61,7 @@ public class UserPortrait {
                 .filter(new LogEntityFilterFunction()).setParallelism(parallelism)
                 .assignTimestampsAndWatermarks(new LogTimeStampPeriodExtractor()).setParallelism(parallelism)
                 .keyBy("userId")
-                .timeWindow(Time.days(5),Time.days(1))
+                .window(LogEntitySlidingEventTimeWindow.of(Time.days(5),Time.days(1)))
                 .trigger(LogEntitytrigger.create())
 //                .evictor(new LogEntityEvictor())
                 .reduce((logEntity, t1) -> {
