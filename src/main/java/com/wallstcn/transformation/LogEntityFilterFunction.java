@@ -6,6 +6,6 @@ import org.apache.flink.api.common.functions.FilterFunction;
 public class LogEntityFilterFunction implements FilterFunction<LogEntity> {
     @Override
     public boolean filter(LogEntity logEntity) throws Exception {
-        return false;
+        return true;
     }
 }
