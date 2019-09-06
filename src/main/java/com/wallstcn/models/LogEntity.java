@@ -2,7 +2,7 @@ package com.wallstcn.models;
 
 public class LogEntity {
     Integer userId;
-    Long timeStamp; //事件发生时间
+    Long timeStamp; //事件发生时间 毫秒
 
     public Integer getUserId() {
         return userId;

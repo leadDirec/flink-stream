@@ -64,9 +64,9 @@ public class UserPortrait {
                 .assignTimestampsAndWatermarks(new LogTimeStampPeriodExtractor()).setParallelism(parallelism)
                 .keyBy("userId")
                 .timeWindow(Time.days(6),Time.days(1))
-                .trigger(LogEntitytrigger.create());
+                .trigger(LogEntitytrigger.create())
 //                .evictor(new LogEntityEvictor())
-//                .apply();
+                .reduce();
         env.execute("User Portrait");
     }
 }
