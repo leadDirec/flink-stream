@@ -59,7 +59,6 @@ public class Property {
 
     public static int getIntValue(String key) {
         String strValue = getValue(key);
-        // 注意，此处没有做校验，暂且认为不会出错
         return Integer.parseInt(strValue);
     }
 

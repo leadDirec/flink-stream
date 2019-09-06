@@ -1,15 +1,20 @@
 package com.wallstcn.transformation;
 
+import org.apache.flink.annotation.PublicEvolving;
 import org.apache.flink.api.common.ExecutionConfig;
 import org.apache.flink.api.common.typeutils.TypeSerializer;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 import org.apache.flink.streaming.api.windowing.assigners.WindowAssigner;
 import org.apache.flink.streaming.api.windowing.time.Time;
+import org.apache.flink.streaming.api.windowing.triggers.EventTimeTrigger;
 import org.apache.flink.streaming.api.windowing.triggers.Trigger;
 import org.apache.flink.streaming.api.windowing.windows.TimeWindow;
-
 import java.util.Collection;
 
+/**
+ * @author xiangdao
+ */
+@PublicEvolving
 public class LogEntitySlidingEventTimeWindow extends WindowAssigner<Object, TimeWindow> {
 
     private static final long serialVersionUID = 1L;
@@ -23,31 +28,53 @@ public class LogEntitySlidingEventTimeWindow extends WindowAssigner<Object, Time
             this.slide = slide;
             this.offset = offset;
         } else {
-            throw new IllegalArgumentException("SlidingEventTimeWindows parameters must satisfy 0 <= offset < slide and size > 0");
+            throw new IllegalArgumentException("LogEntitySlidingEventTimeWindow parameters must satisfy 0 <= offset < slide and size > 0");
         }
     }
 
     @Override
-    public Collection<TimeWindow> assignWindows(Object o, long l, WindowAssignerContext windowAssignerContext) {
+    public Collection<TimeWindow> assignWindows(Object element, long timestamp, WindowAssignerContext context) {
         return null;
     }
 
     @Override
     public Trigger<Object, TimeWindow> getDefaultTrigger(StreamExecutionEnvironment streamExecutionEnvironment) {
-        return null;
+        return EventTimeTrigger.create();
     }
 
     @Override
     public TypeSerializer<TimeWindow> getWindowSerializer(ExecutionConfig executionConfig) {
-        return null;
+        return new TimeWindow.Serializer();
     }
 
     @Override
     public boolean isEventTime() {
-        return false;
+        return true;
     }
 
     public static LogEntitySlidingEventTimeWindow of(Time size, Time slide) {
         return new LogEntitySlidingEventTimeWindow(size.toMilliseconds(), slide.toMilliseconds(), 0L);
     }
+
+    public static LogEntitySlidingEventTimeWindow of(Time size, Time slide, Time offset) {
+        return new LogEntitySlidingEventTimeWindow(size.toMilliseconds(), slide.toMilliseconds(), offset.toMilliseconds() % slide.toMilliseconds());
+    }
+
+    @Override
+    public String toString() {
+        return "LogEntitySlidingEventTimeWindow{" +
+                "size=" + size +
+                ", slide=" + slide +
+                ", offset=" + offset +
+                '}';
+    }
+
+    public long getSize() {
+        return this.size;
+    }
+
+    public long getSlide() {
+        return this.slide;
+    }
+
 }
