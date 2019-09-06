@@ -64,7 +64,7 @@ public class UserPortrait {
                 .filter(new LogEntityFilterFunction()).setParallelism(parallelism)
                 .assignTimestampsAndWatermarks(new LogTimeStampPeriodExtractor()).setParallelism(parallelism)
                 .keyBy("userId")
-                .timeWindow(Time.days(6),Time.days(1))
+                .timeWindow(Time.days(5),Time.days(1))
                 .trigger(LogEntitytrigger.create())
 //                .evictor(new LogEntityEvictor())
                 .reduce((logEntity, t1) -> {
