@@ -18,8 +18,8 @@ public class RedisPool extends ConnectionPoolBase<Jedis> implements ConnectionPo
 
     private static ThreadLocal<Jedis> local=new ThreadLocal<>();
 
-    public RedisPool(final JedisPoolConfig poolConfig, final String host, int port, int timeOut) {
-        super(poolConfig, new RedisConnectionFactory(host,port,timeOut));
+    public RedisPool(final JedisPoolConfig poolConfig, final String host, int port, int timeOut,String auth) {
+        super(poolConfig, new RedisConnectionFactory(host,port,timeOut,auth));
     }
 
     static {
@@ -30,7 +30,7 @@ public class RedisPool extends ConnectionPoolBase<Jedis> implements ConnectionPo
         config.setMaxWaitMillis(Property.getIntValue("redis.pool.maxWait"));
         config.setTestOnBorrow(Property.getBooleanValue("redis.pool.testOnBorrow"));
         config.setTestOnReturn(Property.getBooleanValue("redis.pool.testOnReturn"));
-        pool = new RedisPool(config,Property.getValue("redis.host"),Property.getIntValue("redis.port"),Property.getIntValue("redis.timeout"));
+        pool = new RedisPool(config,Property.getValue("redis.host"),Property.getIntValue("redis.port"),Property.getIntValue("redis.timeout"),Property.getValue("redis.auth"));
         logger.debug("RedisPool initial success");
     }
 
