@@ -17,6 +17,8 @@ public class LogEntitytrigger extends Trigger<LogEntity,TimeWindow> {
 
     @Override
     public TriggerResult onElement(LogEntity logEntity, long l, TimeWindow timeWindow, TriggerContext triggerContext) throws Exception {
+//        triggerContext.registerEventTimeTimer(timeWindow.maxTimestamp());
+//        return TriggerResult.CONTINUE;
         return TriggerResult.FIRE;
     }
 

@@ -32,4 +32,12 @@ public class LogEntity {
         log.setTimeStamp(Long.parseLong(values[1]));
         return log;
     }
+
+    @Override
+    public String toString() {
+        return "LogEntity{" +
+                "userId=" + userId +
+                ", timeStamp=" + timeStamp +
+                '}';
+    }
 }

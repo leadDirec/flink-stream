@@ -67,7 +67,12 @@ public class UserPortrait {
                 .timeWindow(Time.days(6),Time.days(1))
                 .trigger(LogEntitytrigger.create())
 //                .evictor(new LogEntityEvictor())
-                .reduce((logEntity, t1) -> new LogEntity());
+                .reduce((logEntity, t1) -> {
+                    LogEntity entity = new LogEntity();
+                    entity.setUserId(t1.getUserId());
+                    entity.setTimeStamp(t1.getTimeStamp());
+                    return entity;
+                });
         env.execute("User Portrait");
     }
 }
