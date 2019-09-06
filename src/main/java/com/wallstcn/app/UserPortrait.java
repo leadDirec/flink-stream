@@ -1,5 +1,6 @@
 package com.wallstcn.app;
 
+import com.wallstcn.models.LogEntity;
 import com.wallstcn.transformation.LogEntityFilterFunction;
 import com.wallstcn.transformation.LogEntityMapFuntion;
 import com.wallstcn.transformation.LogEntitytrigger;
@@ -66,7 +67,7 @@ public class UserPortrait {
                 .timeWindow(Time.days(6),Time.days(1))
                 .trigger(LogEntitytrigger.create())
 //                .evictor(new LogEntityEvictor())
-                .reduce();
+                .reduce((logEntity, t1) -> new LogEntity());
         env.execute("User Portrait");
     }
 }
