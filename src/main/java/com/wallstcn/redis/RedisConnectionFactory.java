@@ -61,10 +61,11 @@ public class RedisConnectionFactory   implements ConnectionFactory<Jedis> {
 
     @Override
     public boolean validateObject(PooledObject<Jedis> p) {
-        Jedis connection = p.getObject();
-        if (connection != null)
-            return connection.isConnected();
-        return false;
+//        Jedis connection = p.getObject();
+//        if (connection != null)
+//            return connection.isConnected();
+//        return false;
+        return true;
     }
 
     @Override
