@@ -4,6 +4,15 @@ public class JedisConfig {
     String host;
     int port;
     int timeout;
+    String auth;
+
+    public String getAuth() {
+        return auth;
+    }
+
+    public void setAuth(String auth) {
+        this.auth = auth;
+    }
 
     public String getHost() {
         return host;
