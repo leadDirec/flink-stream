@@ -2,6 +2,7 @@ package com.wallstcn.redis;
 
 import com.wallstcn.models.JedisConfig;
 import com.wallstcn.util.connection.ConnectionFactory;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.pool2.PooledObject;
 import org.apache.commons.pool2.impl.DefaultPooledObject;
 import redis.clients.jedis.Jedis;
@@ -27,16 +28,21 @@ public class RedisConnectionFactory   implements ConnectionFactory<Jedis> {
      * <p>Title: RedisConnectionFactory</p>
      * <p>Description: 构造方法</p>
      */
-    public RedisConnectionFactory(final String host, final int port, final int timeOut) {
+    public RedisConnectionFactory(final String host, final int port, final int timeOut,final String auth) {
         this.jedisConfig = new JedisConfig();
         this.jedisConfig.setHost(host);
         this.jedisConfig.setPort(port);
         this.jedisConfig.setTimeout(timeOut);
+        this.jedisConfig.setAuth(auth);
     }
 
     @Override
     public Jedis createConnection() throws Exception {
         Jedis connection = new Jedis(jedisConfig.getHost(),jedisConfig.getPort(),jedisConfig.getTimeout());
+        if (!StringUtils.isEmpty(jedisConfig.getAuth()) && StringUtils.isBlank(jedisConfig.getAuth())) {
+            connection.auth(jedisConfig.getAuth());
+        }
+
         return connection;
     }
 
