@@ -7,6 +7,9 @@ import org.apache.commons.pool2.PooledObject;
 import org.apache.commons.pool2.impl.DefaultPooledObject;
 import redis.clients.jedis.Jedis;
 
+/**
+ * @author xiangdao
+ */
 public class RedisConnectionFactory   implements ConnectionFactory<Jedis> {
 
     private static final long serialVersionUID = 4024923894283696469L;
@@ -61,6 +64,7 @@ public class RedisConnectionFactory   implements ConnectionFactory<Jedis> {
 
     @Override
     public boolean validateObject(PooledObject<Jedis> p) {
+        //TODO validateObject
 //        Jedis connection = p.getObject();
 //        if (connection != null)
 //            return connection.isConnected();
