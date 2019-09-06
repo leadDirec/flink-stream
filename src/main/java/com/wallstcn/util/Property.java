@@ -27,10 +27,10 @@ public class Property {
             InputStreamReader inputStreamReader = new InputStreamReader(in, "UTF-8");
             contextProperties.load(inputStreamReader);
         } catch (IOException e) {
-            logger.debug(">>>userportrait<<<资源文件加载失败!");
+            logger.debug(">>>userportrait<<<资源文件加载失败!"+Property.getEnvConf(""));
             e.printStackTrace();
         }
-        logger.debug(">>>userportrait<<<资源文件加载成功");
+        logger.debug(">>>userportrait<<<资源文件加载成功"+Property.getEnvConf(""));
     }
 
 //    public static String getEnvConf(String jvmKey, String key) {
