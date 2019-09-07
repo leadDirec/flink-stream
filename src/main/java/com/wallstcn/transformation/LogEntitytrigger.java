@@ -1,9 +1,12 @@
 package com.wallstcn.transformation;
 
 import com.wallstcn.models.LogEntity;
+import com.wallstcn.util.DateUtil;
 import org.apache.flink.streaming.api.windowing.triggers.Trigger;
 import org.apache.flink.streaming.api.windowing.triggers.TriggerResult;
 import org.apache.flink.streaming.api.windowing.windows.TimeWindow;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 //CONTINUE:什么都不做。
 //FIRE:触发计算。
@@ -13,10 +16,13 @@ import org.apache.flink.streaming.api.windowing.windows.TimeWindow;
 //参照内置触发器EventTimeTrigger的写法
 public class LogEntitytrigger extends Trigger<LogEntity,TimeWindow> {
 
+    private static final Logger logger = LoggerFactory.getLogger(LogEntitytrigger.class);
+
     private static final long serialVersionUID = 1L;
 
     @Override
-    public TriggerResult onElement(LogEntity logEntity, long l, TimeWindow timeWindow, TriggerContext triggerContext) throws Exception {
+    public TriggerResult onElement(LogEntity logEntity, long l, TimeWindow window, TriggerContext triggerContext) throws Exception {
+        logger.error("onEventTime:   "+ DateUtil.toDatebyStr(window.getStart(),"yyyy-MM-dd HH:mm:ss")+":  "+ DateUtil.toDatebyStr(window.getEnd(),"yyyy-MM-dd HH:mm:ss")+":  "+triggerContext.getCurrentWatermark()+":    "+ DateUtil.toDatebyStr(triggerContext.getCurrentWatermark(),"yyyy-MM-dd HH:mm:ss"));
 //        triggerContext.registerEventTimeTimer(timeWindow.maxTimestamp());
 //        return TriggerResult.CONTINUE;
         return TriggerResult.FIRE;
