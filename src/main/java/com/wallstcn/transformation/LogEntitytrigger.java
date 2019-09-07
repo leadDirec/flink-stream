@@ -20,6 +20,7 @@ public class LogEntitytrigger extends Trigger<LogEntity,TimeWindow> {
 
     private static final long serialVersionUID = 1L;
 
+//  onElement以及onEventTime方法。其中onElement方法在每次数据进入该window时会触发，而onEventTime是在之前注册的eventTime回调函数到达时间时，进行触发。
     @Override
     public TriggerResult onElement(LogEntity logEntity, long l, TimeWindow window, TriggerContext triggerContext) throws Exception {
         logger.error("onEventTime:   "+ DateUtil.toDatebyStr(window.getStart(),"yyyy-MM-dd HH:mm:ss")+":  "+ DateUtil.toDatebyStr(window.getEnd(),"yyyy-MM-dd HH:mm:ss")+":  "+triggerContext.getCurrentWatermark()+":    "+ DateUtil.toDatebyStr(triggerContext.getCurrentWatermark(),"yyyy-MM-dd HH:mm:ss"));
