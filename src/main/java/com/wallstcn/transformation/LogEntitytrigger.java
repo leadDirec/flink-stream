@@ -24,7 +24,7 @@ public class LogEntitytrigger extends Trigger<LogEntity,TimeWindow> {
     @Override
     public TriggerResult onElement(LogEntity logEntity, long l, TimeWindow window, TriggerContext triggerContext) throws Exception {
         logger.error("onEventTime:   "+ DateUtil.toDatebyStr(window.getStart(),"yyyy-MM-dd HH:mm:ss")+":  "+ DateUtil.toDatebyStr(window.getEnd(),"yyyy-MM-dd HH:mm:ss")+":  "+triggerContext.getCurrentWatermark()+":    "+ DateUtil.toDatebyStr(triggerContext.getCurrentWatermark(),"yyyy-MM-dd HH:mm:ss"));
-//        triggerContext.registerEventTimeTimer(timeWindow.maxTimestamp());
+        triggerContext.registerEventTimeTimer(window.maxTimestamp());
 //        return TriggerResult.CONTINUE;
         return TriggerResult.FIRE;
     }
