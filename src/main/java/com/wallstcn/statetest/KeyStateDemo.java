@@ -19,7 +19,7 @@ import java.util.Map;
 
 public class KeyStateDemo  extends RichFlatMapFunction<Tuple2<Long,Long>,Tuple2<Long,Long>>{
 
-    private Integer count = 0; //作用域为一个slot
+    private Integer count = 0; //作用域为一个slot 跟operatorstate一样
 
     private Map<Long,Integer> ha = new HashMap<>();
 
