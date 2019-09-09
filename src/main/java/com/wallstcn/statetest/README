@@ -1,0 +1,4 @@
+状态形式
+
+托管状态（manager）：由Flink管理的一系列状态，比如ValueState，ListState，MapState，通过框架提供的接口进行管理和更新操作，不需要进行序列化。
+原始状态（raw）：由用户自行创建管理的具体数据结构，在做Checkpoint的时候，会以byte[]的形式来读取数据，它需要进行序列化。
