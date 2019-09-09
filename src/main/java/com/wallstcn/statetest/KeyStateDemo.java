@@ -14,12 +14,20 @@ import org.apache.flink.streaming.api.datastream.DataStream;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 import org.apache.flink.util.Collector;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class KeyStateDemo  extends RichFlatMapFunction<Tuple2<Long,Long>,Tuple2<Long,Long>>{
+
+    private Integer count = 0;
+
+    private Map<Long,Integer> ha = new HashMap<>();
 
     private ValueState<Tuple2<Long,Long>> valueState;
 
     @Override
     public void flatMap(Tuple2<Long, Long> value, Collector<Tuple2<Long, Long>> collector) throws Exception {
+        count++;
         Tuple2<Long,Long> currentValue = valueState.value();
         if (currentValue == null) {
             currentValue = Tuple2.of(0L,0L);
@@ -31,6 +39,8 @@ public class KeyStateDemo  extends RichFlatMapFunction<Tuple2<Long,Long>,Tuple2<
             collector.collect(Tuple2.of(value.f0,currentValue.f1/currentValue.f0));
             valueState.clear();
         }
+        ha.put(value.f0,0);
+        System.out.println(ha);
     }
 
 
@@ -65,7 +75,7 @@ public class KeyStateDemo  extends RichFlatMapFunction<Tuple2<Long,Long>,Tuple2<
 
         input.keyBy(0)
                 .flatMap(new KeyStateDemo())
-                .setParallelism(10)
+                .setParallelism(3)
                 .print();
 
         env.execute();
@@ -74,5 +84,15 @@ public class KeyStateDemo  extends RichFlatMapFunction<Tuple2<Long,Long>,Tuple2<
 
 //TTL过期时间   对于每一个keyed State，还可以设置TTL过期时间，它会将过期的state删除掉，通过下面的方式来设置TTL：
 // 1：ttl时长
-// 2： 定义更新 TTL 状态最后访问时间的更新类型：创建和读（StateTtlConfig.UpdateType.OnCreateAndWrite）、读和写（StateTtlConfig.UpdateType.OnReadAndWrite）
 // 3：定义状态的可见性，是否返回过期状态。启用 TTL：stateDescriptor.enableTimeToLive(retainOneDay);
+
+//该newBuilder方法的第一个参数是必需的，它是生存时间值。
+//
+// 2 ：setUpdateType()：设置State更新类型，配置参数有：
+//        StateTtlConfig.UpdateType.Disabled：状态不过期
+//        StateTtlConfig.UpdateType.OnCreateAndWrite：仅仅是创建和写入权限（默认）
+//        StateTtlConfig.UpdateType.OnReadAndWrite：读和写权限
+//        setStateVisibility()：State可见状态，配置参数有：
+//
+//        StateTtlConfig.StateVisibility.NeverReturnExpired：过期值永不返回
+//        StateTtlConfig.StateVisibility.ReturnExpiredIfNotCleanedUp：如果可用，则返回（没清除，还存在，返回）
