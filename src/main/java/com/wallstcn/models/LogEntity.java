@@ -1,14 +1,54 @@
 package com.wallstcn.models;
 
-public class LogEntity {
-    Integer userId;
-    Long timeStamp; //事件发生时间 毫秒
+import java.util.List;
 
-    public Integer getUserId() {
+public class LogEntity {
+    public Long userId;
+    public Long timeStamp; //事件发生时间 毫秒
+    public String actionType;
+    public Integer Action;
+    public List<Integer> relatedLabels;
+
+    public List<Integer> getRelatedLabels() {
+        return relatedLabels;
+    }
+
+    public void setRelatedLabels(List<Integer> relatedLabels) {
+        this.relatedLabels = relatedLabels;
+    }
+
+    @Override
+    public String toString() {
+        return "LogEntity{" +
+                "userId=" + userId +
+                ", timeStamp=" + timeStamp +
+                ", actionType='" + actionType + '\'' +
+                ", Action=" + Action +
+                ", relatedLabels=" + relatedLabels +
+                '}';
+    }
+
+    public String getActionType() {
+        return actionType;
+    }
+
+    public void setActionType(String actionType) {
+        this.actionType = actionType;
+    }
+
+    public Integer getAction() {
+        return Action;
+    }
+
+    public void setAction(Integer action) {
+        Action = action;
+    }
+
+    public Long getUserId() {
         return userId;
     }
 
-    public void setUserId(Integer userId) {
+    public void setUserId(Long userId) {
         this.userId = userId;
     }
 
@@ -28,16 +68,9 @@ public class LogEntity {
             return null;
         }
         LogEntity log = new LogEntity();
-        log.setUserId(Integer.parseInt(values[0]));
+        log.setUserId(Long.parseLong(values[0]));
         log.setTimeStamp(Long.parseLong(values[1]));
         return log;
     }
 
-    @Override
-    public String toString() {
-        return "LogEntity{" +
-                "userId=" + userId +
-                ", timeStamp=" + timeStamp +
-                '}';
-    }
 }
