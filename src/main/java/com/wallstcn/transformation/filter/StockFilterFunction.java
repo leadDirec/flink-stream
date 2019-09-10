@@ -44,7 +44,7 @@ public class StockFilterFunction implements FilterFunction<LogEntity> {
                 strings[i] = labels.get(i);
             }
             logEntity.setRelatedLabels(strings);
-
+            return true;
         }
         return false;
     }
