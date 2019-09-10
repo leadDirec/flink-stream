@@ -2,7 +2,7 @@ package com.wallstcn.app;
 
 import com.wallstcn.common.ActionConstant;
 import com.wallstcn.models.LogEntity;
-import com.wallstcn.transformation.*;
+import com.wallstcn.transformation.LogEntityMapFuntion;
 import com.wallstcn.transformation.filter.ArticleFilterFunction;
 import com.wallstcn.transformation.filter.FeaturesFilterFunction;
 import com.wallstcn.transformation.filter.StockFilterFunction;
@@ -11,6 +11,7 @@ import com.wallstcn.transformation.map.FeaturesMapFuntion;
 import com.wallstcn.transformation.map.StockMapFuntion;
 import com.wallstcn.util.Property;
 import org.apache.flink.api.common.serialization.SimpleStringSchema;
+import org.apache.flink.api.common.typeinfo.TypeInformation;
 import org.apache.flink.contrib.streaming.state.RocksDBStateBackend;
 import org.apache.flink.streaming.api.CheckpointingMode;
 import org.apache.flink.streaming.api.TimeCharacteristic;
@@ -34,9 +35,9 @@ public class UserPortrait {
 //    private static final OutputTag<LogEntity> EnthusiastsTechnophile = new OutputTag<>("EnthusiastsTechnophile");
 //    private static final OutputTag<LogEntity> SmallWhiteUsers = new OutputTag<>("SmallWhiteUsers");
 
-    private static final OutputTag<LogEntity> stocks = new OutputTag<>(ActionConstant.StockAction.ActionType);
-    private static final OutputTag<LogEntity> articles = new OutputTag<>(ActionConstant.ArticleAction.ActionType);
-    private static final OutputTag<LogEntity> features = new OutputTag<>(ActionConstant.FeaturesAction.ActionType);
+    private static final OutputTag<LogEntity> stocks = new OutputTag<>(ActionConstant.StockAction.ActionType, TypeInformation.of(LogEntity.class));
+    private static final OutputTag<LogEntity> articles = new OutputTag<>(ActionConstant.ArticleAction.ActionType, TypeInformation.of(LogEntity.class));
+    private static final OutputTag<LogEntity> features = new OutputTag<>(ActionConstant.FeaturesAction.ActionType, TypeInformation.of(LogEntity.class));
 
     public static void main(String[] args) throws Exception {
 
