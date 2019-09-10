@@ -20,7 +20,11 @@ public class StockFilterFunction implements FilterFunction<LogEntity> {
             String key = Keys.getUserArticleActionKeys(logEntity.getUserId(),day,label);
             if (logEntity.getAction() == ActionConstant.StockAction.BrowseStocksAction) {
                 Long ret = RedisPool.get().hincrBy(key, String.valueOf(logEntity.getAction()),1);
-                if (ret <= 3) {
+                if (ret == 1) {
+                    return true;
+                }
+                if (ret.equals(ActionConstant.StockAction.BrowseStocksFrequencyCount)) {
+                    logEntity.setAction(ActionConstant.StockAction.BrowseStocksFrequencyAction);
                     return true;
                 }
             } else {

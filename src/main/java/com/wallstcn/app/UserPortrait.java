@@ -6,6 +6,9 @@ import com.wallstcn.transformation.*;
 import com.wallstcn.transformation.filter.ArticleFilterFunction;
 import com.wallstcn.transformation.filter.FeaturesFilterFunction;
 import com.wallstcn.transformation.filter.StockFilterFunction;
+import com.wallstcn.transformation.map.ArticleMapFuntion;
+import com.wallstcn.transformation.map.FeaturesMapFuntion;
+import com.wallstcn.transformation.map.StockMapFuntion;
 import com.wallstcn.util.Property;
 import org.apache.flink.api.common.serialization.SimpleStringSchema;
 import org.apache.flink.contrib.streaming.state.RocksDBStateBackend;
@@ -126,16 +129,13 @@ public class UserPortrait {
 
         stream.getSideOutput(stocks).keyBy("userId")
                 .filter(StockFilterFunction.create()).setParallelism(parallelism)
-//                .map().setParallelism(parallelism)
-        ;
+                .map(StockMapFuntion.create()).setParallelism(parallelism);
         stream.getSideOutput(articles).keyBy("userId")
                 .filter(ArticleFilterFunction.create()).setParallelism(parallelism)
-//                .map().setParallelism(parallelism)
-        ;
+                .map(ArticleMapFuntion.create()).setParallelism(parallelism);
         stream.getSideOutput(features).keyBy("userId")
                 .filter(FeaturesFilterFunction.create()).setParallelism(parallelism)
-//                .map().setParallelism(parallelism)
-        ;
+                .map(FeaturesMapFuntion.create()).setParallelism(parallelism);
 
 //        DataStream<String> transction = env.addSource(consumer).setParallelism(parallelism);
 //        transction.map(new LogEntityMapFuntion()).setParallelism(parallelism)

@@ -20,8 +20,8 @@ public class ActionConstant {
         public static final int BrowseStocksAction = 3001;//浏览股票
         public static final Double BrowseStocksActionScore = 1.0;//浏览股票得分
 
-//        public static final int BrowseStocksFrequencyAction = 3002;//多次浏览股票
-        public static final Integer BrowseStocksFrequencyCount = 3;//多次浏览股票次数
+        public static final int BrowseStocksFrequencyAction = 3002;//多次浏览股票
+        public static final Long BrowseStocksFrequencyCount = 3L;//多次浏览股票次数
         public static final Double BrowseStocksFrequencyActionScore = 3.0;
 
         public static final int UserListOptionalStocksAction = 3003;//自选股列表包含符合条件
