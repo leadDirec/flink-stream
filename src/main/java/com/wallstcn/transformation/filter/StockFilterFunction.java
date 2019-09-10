@@ -13,7 +13,7 @@ public class StockFilterFunction implements FilterFunction<LogEntity> {
     @Override
     public boolean filter(LogEntity logEntity) throws Exception {
         String day = DateUtil.toDatebyStr(logEntity.getTimeStamp(), CommonConstant.DAY_PATTERN);
-        if (logEntity.getRelatedLabels().size() == 0) {
+        if (logEntity.getRelatedLabels().length == 0) {
             return false;
         }
         for (Integer label : logEntity.getRelatedLabels()) {
