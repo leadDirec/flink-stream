@@ -122,17 +122,20 @@ public class UserPortrait {
                             ctx.output(features, value);
                         }
                     }
-                });
+                }).setParallelism(parallelism);
 
         stream.getSideOutput(stocks).keyBy("userId")
                 .filter(StockFilterFunction.create()).setParallelism(parallelism)
-                .map().setParallelism(parallelism);
+//                .map().setParallelism(parallelism)
+        ;
         stream.getSideOutput(articles).keyBy("userId")
                 .filter(ArticleFilterFunction.create()).setParallelism(parallelism)
-                .map().setParallelism(parallelism);
+//                .map().setParallelism(parallelism)
+        ;
         stream.getSideOutput(features).keyBy("userId")
                 .filter(FeaturesFilterFunction.create()).setParallelism(parallelism)
-                .map().setParallelism(parallelism);
+//                .map().setParallelism(parallelism)
+        ;
 
 //        DataStream<String> transction = env.addSource(consumer).setParallelism(parallelism);
 //        transction.map(new LogEntityMapFuntion()).setParallelism(parallelism)
