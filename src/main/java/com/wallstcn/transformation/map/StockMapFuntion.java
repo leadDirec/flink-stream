@@ -27,7 +27,7 @@ public class StockMapFuntion implements MapFunction<LogEntity,Void>{
                     return null;
             }
             String key = Keys.getUserLabelDatealKeys(logEntity.getUserId(),logEntity.getRelatedLabels()[i]);
-            RedisPool.get().hincrByFloat(key,String.valueOf(logEntity.getAction()),score);
+            RedisPool.get().hincrByFloat(key,String.valueOf(action),score);
         }
         return null;
     }
