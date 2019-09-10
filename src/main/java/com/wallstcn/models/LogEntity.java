@@ -1,9 +1,13 @@
 package com.wallstcn.models;
 
+import java.io.Serializable;
 import java.util.Arrays;
 import java.util.function.ToIntFunction;
 
-public class LogEntity {
+public class LogEntity implements Serializable {
+
+    private static final long serialVersionUID = -7742311969684489496L;
+
     public Long userId;
     public Long timeStamp; //事件发生时间 毫秒
     public String actionType;
@@ -103,5 +107,4 @@ public class LogEntity {
             System.out.println(l);
         }
     }
-
 }
