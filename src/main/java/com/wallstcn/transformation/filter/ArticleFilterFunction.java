@@ -7,6 +7,9 @@ import com.wallstcn.redis.RedisPool;
 import com.wallstcn.util.DateUtil;
 import org.apache.flink.api.common.functions.FilterFunction;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class ArticleFilterFunction implements FilterFunction<LogEntity> {
 
     @Override
@@ -17,11 +20,12 @@ public class ArticleFilterFunction implements FilterFunction<LogEntity> {
         }
 //        switch (logEntity.Action) {
 //            case ActionConstant.ArticleAction.BrowseArticleAction:
+        List<Integer> labels = new ArrayList<>();
                 for (Integer label : logEntity.getRelatedLabels()) {
                     String key = Keys.getUserArticleActionKeys(logEntity.getUserId(),day,label);
                     Long ret = RedisPool.get().hincrBy(key, String.valueOf(logEntity.getAction()),1);
                     if (ret == 1) { //当天第一次
-                        return true;
+                        labels.add(label);
                     }
                 }
 //            case ActionConstant.ArticleAction.PushArticleOpenAction:
@@ -37,6 +41,14 @@ public class ArticleFilterFunction implements FilterFunction<LogEntity> {
 //            default:
                 //nothing to do
 //        }
+        if (!labels.isEmpty()) {
+            int[] strings = new int[labels.size()];
+            for(int i=0;i<labels.size();i++) {
+                strings[i] = labels.get(i);
+            }
+            logEntity.setRelatedLabels(strings);
+            return true;
+        }
         return false;
     }
 
