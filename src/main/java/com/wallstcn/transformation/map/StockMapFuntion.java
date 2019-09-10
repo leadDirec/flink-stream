@@ -10,22 +10,23 @@ public class StockMapFuntion implements MapFunction<LogEntity,Void>{
 
     @Override
     public Void map(LogEntity logEntity) throws Exception {
-        Double score = 0.0;
-        switch (logEntity.getAction()) {
-            case ActionConstant.StockAction.BrowseStocksAction:
-                score = ActionConstant.StockAction.BrowseStocksActionScore;
-                break;
-            case ActionConstant.StockAction.BrowseStocksFrequencyAction:
-                score = ActionConstant.StockAction.BrowseStocksFrequencyActionScore;
-                break;
-            case ActionConstant.StockAction.SearchStocksAction:
-                score = ActionConstant.StockAction.SearchStocksActionScore;
-                break;
-            default:
-                return null;
-        }
-        for  (Integer label : logEntity.getRelatedLabels()) {
-            String key = Keys.getUserLabelDatealKeys(logEntity.getUserId(),label);
+        for (int i =0;i<logEntity.getRelatedLabels().length;i++) {
+            Integer action = logEntity.getActions().get(i);
+            Double score = 0.0;
+            switch (action) {
+                case ActionConstant.StockAction.BrowseStocksAction:
+                    score = ActionConstant.StockAction.BrowseStocksActionScore;
+                    break;
+                case ActionConstant.StockAction.BrowseStocksFrequencyAction:
+                    score = ActionConstant.StockAction.BrowseStocksFrequencyActionScore;
+                    break;
+                case ActionConstant.StockAction.SearchStocksAction:
+                    score = ActionConstant.StockAction.SearchStocksActionScore;
+                    break;
+                default:
+                    return null;
+            }
+            String key = Keys.getUserLabelDatealKeys(logEntity.getUserId(),logEntity.getRelatedLabels()[i]);
             RedisPool.get().hincrByFloat(key,String.valueOf(logEntity.getAction()),score);
         }
         return null;

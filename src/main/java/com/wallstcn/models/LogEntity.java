@@ -2,6 +2,7 @@ package com.wallstcn.models;
 
 import java.io.Serializable;
 import java.util.Arrays;
+import java.util.List;
 import java.util.function.ToIntFunction;
 
 public class LogEntity implements Serializable {
@@ -12,7 +13,16 @@ public class LogEntity implements Serializable {
     public Long timeStamp; //事件发生时间 毫秒
     public String actionType;
     public Integer Action;
+    public List<Integer> Actions;
     public int[] relatedLabels;
+
+    public  List<Integer> getActions() {
+        return Actions;
+    }
+
+    public void setActions( List<Integer> actions) {
+        Actions = actions;
+    }
 
     public int[] getRelatedLabels() {
         return relatedLabels;
@@ -29,7 +39,8 @@ public class LogEntity implements Serializable {
                 ", timeStamp=" + timeStamp +
                 ", actionType='" + actionType + '\'' +
                 ", Action=" + Action +
-                ", relatedLabels=" + relatedLabels +
+                ", Actions=" + Actions +
+                ", relatedLabels=" + Arrays.toString(relatedLabels) +
                 '}';
     }
 

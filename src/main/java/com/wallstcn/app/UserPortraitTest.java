@@ -36,7 +36,6 @@ public class UserPortraitTest {
 
         DataStream<String> socketstream = env.socketTextStream("127.0.0.1",9000);
         SingleOutputStreamOperator<LogEntity> stream = socketstream
-//        SingleOutputStreamOperator<LogEntity> stream = env.addSource(consumer).setParallelism(parallelism)
                 .map(new LogEntityMapFuntion()).setParallelism(parallelism)
                 .process(new ProcessFunction<LogEntity, LogEntity>() {
                     @Override
@@ -64,13 +63,4 @@ public class UserPortraitTest {
         env.execute("User Portrait");
     }
 
-//    public static void split(LogEntity value, ProcessFunction.Context ctx) {
-//        if (ActionConstant.StockAction.ActionType.equals(value.getActionType())) {
-//            ctx.output(stocks, value);
-//        } else if (ActionConstant.ArticleAction.ActionType.equals(value.getActionType())) {
-//            ctx.output(articles, value);
-//        } else if (ActionConstant.FeaturesAction.ActionType.equals(value.getActionType())) {
-//            ctx.output(features, value);
-//        }
-//    }
 }

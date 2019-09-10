@@ -20,15 +20,17 @@ public class StockFilterFunction implements FilterFunction<LogEntity> {
             return false;
         }
         List<Integer> labels = new ArrayList<>();
+        List<Integer> actions = new ArrayList<>();
         for (Integer label : logEntity.getRelatedLabels()) {
             String key = Keys.getUserArticleActionKeys(logEntity.getUserId(),day,label);
             if (logEntity.getAction() == ActionConstant.StockAction.BrowseStocksAction) {
                 Long ret = RedisPool.get().hincrBy(key, String.valueOf(logEntity.getAction()),1);
                 if (ret == 1) {
+                    actions.add(ActionConstant.StockAction.BrowseStocksAction);
                     labels.add(label);
                 }
                 if (ret.equals(ActionConstant.StockAction.BrowseStocksFrequencyCount)) {
-                    logEntity.setAction(ActionConstant.StockAction.BrowseStocksFrequencyAction);
+                    actions.add(ActionConstant.StockAction.BrowseStocksFrequencyAction);
                     labels.add(label);
                 }
             } else {
@@ -43,6 +45,7 @@ public class StockFilterFunction implements FilterFunction<LogEntity> {
             for(int i=0;i<labels.size();i++) {
                 strings[i] = labels.get(i);
             }
+            logEntity.setActions(actions);
             logEntity.setRelatedLabels(strings);
             return true;
         }

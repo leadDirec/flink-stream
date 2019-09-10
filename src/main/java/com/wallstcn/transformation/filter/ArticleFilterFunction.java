@@ -18,29 +18,14 @@ public class ArticleFilterFunction implements FilterFunction<LogEntity> {
         if (logEntity.getRelatedLabels().length == 0) {
             return false;
         }
-//        switch (logEntity.Action) {
-//            case ActionConstant.ArticleAction.BrowseArticleAction:
         List<Integer> labels = new ArrayList<>();
-                for (Integer label : logEntity.getRelatedLabels()) {
-                    String key = Keys.getUserArticleActionKeys(logEntity.getUserId(),day,label);
-                    Long ret = RedisPool.get().hincrBy(key, String.valueOf(logEntity.getAction()),1);
-                    if (ret == 1) { //当天第一次
-                        labels.add(label);
-                    }
-                }
-//            case ActionConstant.ArticleAction.PushArticleOpenAction:
-//                break;
-//            case ActionConstant.ArticleAction.CollectionArticleAction:
-//                break;
-//            case ActionConstant.ArticleAction.CommentArticleAction:
-//                break;
-//            case ActionConstant.ArticleAction.SearchArticleAction:
-//                break;
-//            case ActionConstant.ArticleAction.ShareArticleAction:
-//                break;
-//            default:
-                //nothing to do
-//        }
+        for (Integer label : logEntity.getRelatedLabels()) {
+            String key = Keys.getUserArticleActionKeys(logEntity.getUserId(),day,label);
+            Long ret = RedisPool.get().hincrBy(key, String.valueOf(logEntity.getAction()),1);
+            if (ret == 1) { //当天第一次
+                labels.add(label);
+            }
+        }
         if (!labels.isEmpty()) {
             int[] strings = new int[labels.size()];
             for(int i=0;i<labels.size();i++) {
