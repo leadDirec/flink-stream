@@ -11,8 +11,8 @@ public class FeaturesMapFuntion implements MapFunction<LogEntity,Void>{
     @Override
     public Void map(LogEntity logEntity) throws Exception {
         for  (Integer label : logEntity.getRelatedLabels()) {
-            String key = Keys.getUserLabelDatealKeys(logEntity.getUserId(),label);
-            RedisPool.get().hincrByFloat(key,String.valueOf(logEntity.getAction()), ActionConstant.FeaturesAction.HavePurchasedShortTermLabelPaymentColumnScore);
+            String key = Keys.getUserLabelActionScore(logEntity.getUserId(),label);
+            RedisPool.get().incrByFloat(key, ActionConstant.FeaturesAction.HavePurchasedShortTermLabelPaymentColumnScore);
         }
         return null;
     }

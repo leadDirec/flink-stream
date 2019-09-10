@@ -23,8 +23,9 @@ public class StockFilterFunction implements FilterFunction<LogEntity> {
         List<Integer> actions = new ArrayList<>();
         for (Integer label : logEntity.getRelatedLabels()) {
             String key = Keys.getUserArticleActionKeys(logEntity.getUserId(),day,label);
+            RedisPool.get().hincrBy(key, String.valueOf(logEntity.getAction()),1);
+            Long ret = RedisPool.get().hincrBy( Keys.getUserLabelDatealKeys(logEntity.getUserId(),label),String.valueOf(logEntity.getAction()),1);
             if (logEntity.getAction() == ActionConstant.StockAction.BrowseStocksAction) {
-                Long ret = RedisPool.get().hincrBy(key, String.valueOf(logEntity.getAction()),1);
                 if (ret == 1) {
                     actions.add(ActionConstant.StockAction.BrowseStocksAction);
                     labels.add(label);
@@ -34,8 +35,11 @@ public class StockFilterFunction implements FilterFunction<LogEntity> {
                     labels.add(label);
                 }
             } else {
-                Long ret = RedisPool.get().hincrBy(key, String.valueOf(logEntity.getAction()),1);
-                if (ret == 1 ) { //当天第一次
+//                if (!RedisPool.get().getbit(Keys.getUserActionDuplicateKeys(logEntity.getUserId(),label),logEntity.getAction() % 3000)) {
+//                    RedisPool.get().setbit(Keys.getUserActionDuplicateKeys(logEntity.getUserId(),label),logEntity.getAction() % 3000,true);
+//                    labels.add(label); //5天一次
+//                }
+                if (ret == 1) {
                     labels.add(label);
                 }
             }
@@ -55,4 +59,5 @@ public class StockFilterFunction implements FilterFunction<LogEntity> {
     public static StockFilterFunction create() {
         return new StockFilterFunction();
     }
+
 }

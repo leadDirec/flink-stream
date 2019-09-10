@@ -34,8 +34,8 @@ public class ArticleMapFuntion implements MapFunction<LogEntity,Void>{
                 return null;
         }
         for  (Integer label : logEntity.getRelatedLabels()) {
-            String key = Keys.getUserLabelDatealKeys(logEntity.getUserId(),label);
-            RedisPool.get().hincrByFloat(key,String.valueOf(logEntity.getAction()),score);
+            String key = Keys.getUserLabelActionScore(logEntity.getUserId(),label);
+            RedisPool.get().incrByFloat(key,score);
         }
         return null;
     }
