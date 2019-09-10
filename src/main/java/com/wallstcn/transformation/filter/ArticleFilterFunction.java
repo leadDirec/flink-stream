@@ -11,7 +11,7 @@ public class ArticleFilterFunction implements FilterFunction<LogEntity> {
 
     @Override
     public boolean filter(LogEntity logEntity) throws Exception {
-        String day = DateUtil.toDatebyStr(System.currentTimeMillis(), CommonConstant.DAY_PATTERN);
+        String day = DateUtil.toDatebyStr(logEntity.getTimeStamp(), CommonConstant.DAY_PATTERN);
         if (logEntity.getRelatedLabels().size() == 0) {
             return false;
         }
