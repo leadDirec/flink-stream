@@ -130,14 +130,14 @@ public class UserPortrait {
                 }).setParallelism(parallelism);
 
         stream.getSideOutput(stocks).keyBy("userId")
-                .filter(StockFilterFunction.create()).setParallelism(parallelism)
-                .map(StockMapFuntion.create()).setParallelism(parallelism);
+                .filter(StockFilterFunction.create()).setParallelism(5)
+                .map(StockMapFuntion.create()).setParallelism(5);
         stream.getSideOutput(articles).keyBy("userId")
-                .filter(ArticleFilterFunction.create()).setParallelism(parallelism)
-                .map(ArticleMapFuntion.create()).setParallelism(parallelism);
+                .filter(ArticleFilterFunction.create()).setParallelism(5)
+                .map(ArticleMapFuntion.create()).setParallelism(5);
         stream.getSideOutput(features).keyBy("userId")
-                .filter(FeaturesFilterFunction.create()).setParallelism(parallelism)
-                .map(FeaturesMapFuntion.create()).setParallelism(parallelism);
+                .filter(FeaturesFilterFunction.create()).setParallelism(4)
+                .map(FeaturesMapFuntion.create()).setParallelism(5);
 
 //        DataStream<String> transction = env.addSource(consumer).setParallelism(parallelism);
 //        transction.map(new LogEntityMapFuntion()).setParallelism(parallelism)
