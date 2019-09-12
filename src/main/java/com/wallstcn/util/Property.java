@@ -21,7 +21,7 @@ public class Property {
     private static Properties contextProperties;
 
     static {
-        InputStream in = Thread.currentThread().getContextClassLoader().getResourceAsStream(Property.getEnvConf(""));
+        InputStream in = Thread.currentThread().getContextClassLoader().getResourceAsStream(Property.getEnvConf(envKey));
         contextProperties = new Properties();
         try {
             InputStreamReader inputStreamReader = new InputStreamReader(in, "UTF-8");
@@ -46,7 +46,8 @@ public class Property {
         if (StringUtils.isEmpty(key)) {
             key = envKey;
         }
-        String env = System.getProperty(key);
+//        String env = System.getProperty(key);
+        String env = System.getenv(key);
         if (StringUtils.isEmpty(env)) {
             return "local".concat(CONF_NAME);
         }

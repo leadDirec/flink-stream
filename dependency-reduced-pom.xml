@@ -39,7 +39,7 @@
               </filters>
               <transformers>
                 <transformer>
-                  <mainClass>com.wallstcn.app.UserPortraitTest</mainClass>
+                  <mainClass>com.wallstcn.app.UserPortrait</mainClass>
                 </transformer>
               </transformers>
             </configuration>
