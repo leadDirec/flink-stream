@@ -39,7 +39,7 @@
               </filters>
               <transformers>
                 <transformer>
-                  <mainClass>org.wallstcn.app.UserPortraitTest</mainClass>
+                  <mainClass>com.wallstcn.app.UserPortraitTest</mainClass>
                 </transformer>
               </transformers>
             </configuration>
@@ -111,10 +111,6 @@
         </exclusion>
         <exclusion>
           <artifactId>flink-clients_2.11</artifactId>
-          <groupId>org.apache.flink</groupId>
-        </exclusion>
-        <exclusion>
-          <artifactId>flink-shaded-guava</artifactId>
           <groupId>org.apache.flink</groupId>
         </exclusion>
       </exclusions>

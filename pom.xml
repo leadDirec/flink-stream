@@ -188,7 +188,7 @@ under the License.
 							</filters>
 							<transformers>
 								<transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
-									<mainClass>com.wallstcn.app.UserPortraitTest</mainClass>
+									<mainClass>com.wallstcn.app.UserPortrait</mainClass>
 								</transformer>
 							</transformers>
 						</configuration>
