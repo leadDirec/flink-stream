@@ -71,7 +71,7 @@ public class Property {
     public static Properties getKafkaProperties() {
         Properties properties = new Properties();
         properties.setProperty("bootstrap.servers", getValue("kafka.bootstrap.servers"));
-        properties.setProperty("zookeeper.connect", getValue("kafka.zookeeper.connect"));
+//        properties.setProperty("zookeeper.connect", getValue("kafka.zookeeper.connect"));
         properties.setProperty("group.id", getValue("kafka.group.id"));
         properties.put("key.deserializer", "org.apache.kafka.common.serialization.StringDeserializer");  //key 反序列化
         properties.put("value.deserializer", "org.apache.kafka.common.serialization.StringDeserializer");
