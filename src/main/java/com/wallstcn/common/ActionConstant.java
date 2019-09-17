@@ -36,7 +36,7 @@ public class ActionConstant {
         public static final String ActionType = "article";
 
         public static final int BrowseArticleAction = 2001;//浏览文章
-        public static final Double BrowseStocksActionScore = 1.0;
+        public static final Double BrowseArticleActionScore = 1.0;
 
         public static final int PushArticleOpenAction = 2002;//推送打开符合条件
         public static final Double PushArticleOpenActionScore = 2.0;

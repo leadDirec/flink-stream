@@ -13,7 +13,7 @@ public class ArticleMapFuntion implements MapFunction<LogEntity,Void>{
         Double score = 0.0;
         switch (logEntity.getAction()) {
             case ActionConstant.ArticleAction.BrowseArticleAction:
-                score = ActionConstant.ArticleAction.BrowseStocksActionScore;
+                score = ActionConstant.ArticleAction.BrowseArticleActionScore;
                 break;
             case ActionConstant.ArticleAction.PushArticleOpenAction:
                 score = ActionConstant.ArticleAction.PushArticleOpenActionScore;
