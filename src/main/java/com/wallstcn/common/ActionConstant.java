@@ -76,6 +76,9 @@ public class ActionConstant {
         public static final int HavePurchasedSubjectLabelPaymentColumn = 4006;//曾购买过题材标签付费栏目
         public static final Double HavePurchasedSubjectLabelPaymentColumnScore = 5.0;
 
+        public static final  int Click724hNews = 4007;//点击7*24h快讯
+        public static final Double Click724hNewsScore = 5.0;
+
         public static final int BrowseSectionPage = 4008;//浏览板块页
         public static final Double BrowseSectionPageScore = 5.0;
 

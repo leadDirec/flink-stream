@@ -51,7 +51,9 @@ public abstract class DateUtil {
         Map<String, SimpleDateFormat> simpleDateFormatMap = threadLocal.get();
         if (simpleDateFormatMap == null) {
             simpleDateFormatMap = new HashMap<String, SimpleDateFormat>();
-            simpleDateFormatMap.put(pattern, new SimpleDateFormat(pattern));
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
+            simpleDateFormat.setTimeZone(TimeZone.getTimeZone("Asia/Shanghai"));
+            simpleDateFormatMap.put(pattern, simpleDateFormat);
             threadLocal.set(simpleDateFormatMap);
             return simpleDateFormatMap.get(pattern);
         } else {
@@ -61,7 +63,9 @@ public abstract class DateUtil {
             if (simpleDateFormat != null) {
                 return simpleDateFormat;
             }
-            simpleDateFormatMap.put(pattern, new SimpleDateFormat(pattern));
+            SimpleDateFormat dateFormat = new SimpleDateFormat(pattern);
+            dateFormat.setTimeZone(TimeZone.getTimeZone("Asia/Shanghai"));
+            simpleDateFormatMap.put(pattern, dateFormat);
             return simpleDateFormatMap.get(pattern);
         }
     }

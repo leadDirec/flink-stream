@@ -1,9 +1,10 @@
 package com.wallstcn.models;
 
+import com.wallstcn.util.JacksonUtils;
+
 import java.io.Serializable;
 import java.util.Arrays;
 import java.util.List;
-import java.util.function.ToIntFunction;
 
 public class LogEntity implements Serializable {
 
@@ -78,25 +79,26 @@ public class LogEntity implements Serializable {
     }
 
     public static LogEntity getUserLog(String value) {
-        String[] values = value.split(",");
-        if (values.length < 1) {
-            System.out.println("Message is not correct");
-            return null;
-        }
-        LogEntity log = new LogEntity();
-        log.setUserId(Long.parseLong(values[0]));
-        log.setTimeStamp(Long.parseLong(values[1]));
-        log.setActionType(values[2]);
-        log.setAction(Integer.parseInt(values[3]));
-        if (values.length > 4) {
-            int[] labels = Arrays.stream(values).skip(4).mapToInt(new ToIntFunction<String>() {
-                @Override
-                public int applyAsInt(String v) {
-                    return Integer.parseInt(v);
-                }
-            }).toArray();
-            log.setRelatedLabels(labels);
-        }
+//        String[] values = value.split(",");
+//        if (values.length < 1) {
+//            System.out.println("Message is not correct");
+//            return null;
+//        }
+//        LogEntity log = new LogEntity();
+//        log.setUserId(Long.parseLong(values[0]));
+//        log.setTimeStamp(Long.parseLong(values[1]));
+//        log.setActionType(values[2]);
+//        log.setAction(Integer.parseInt(values[3]));
+//        if (values.length > 4) {
+//            int[] labels = Arrays.stream(values).skip(4).mapToInt(new ToIntFunction<String>() {
+//                @Override
+//                public int applyAsInt(String v) {
+//                    return Integer.parseInt(v);
+//                }
+//            }).toArray();
+//            log.setRelatedLabels(labels);
+//        }
+        LogEntity log = JacksonUtils.fromJson(value,LogEntity.class);
         return log;
     }
 
