@@ -42,7 +42,7 @@ public class RedisConnectionFactory   implements ConnectionFactory<Jedis> {
     @Override
     public Jedis createConnection() throws Exception {
         Jedis connection = new Jedis(jedisConfig.getHost(),jedisConfig.getPort(),jedisConfig.getTimeout());
-        if (!StringUtils.isEmpty(jedisConfig.getAuth()) && StringUtils.isBlank(jedisConfig.getAuth())) {
+        if (!StringUtils.isEmpty(jedisConfig.getAuth()) && !StringUtils.isBlank(jedisConfig.getAuth())) {
             connection.auth(jedisConfig.getAuth());
         }
 

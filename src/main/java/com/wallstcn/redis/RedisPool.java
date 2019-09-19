@@ -57,4 +57,8 @@ public class RedisPool extends ConnectionPoolBase<Jedis> implements ConnectionPo
     public void invalidateConnection(Jedis conn) {
         super.invalidateResource(conn);
     }
+
+    public static void main(String[] args) {
+        RedisPool.get();
+    }
 }
