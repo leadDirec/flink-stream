@@ -6,6 +6,7 @@ import com.wallstcn.models.LogEntity;
 import com.wallstcn.redis.Keys;
 import com.wallstcn.redis.RedisPool;
 import com.wallstcn.util.DateUtil;
+import org.apache.directory.api.util.Strings;
 import org.apache.flink.api.common.functions.FilterFunction;
 
 import java.util.ArrayList;
@@ -17,6 +18,9 @@ public class StockFilterFunction implements FilterFunction<LogEntity> {
     public boolean filter(LogEntity logEntity) throws Exception {
         String day = DateUtil.toDatebyStr(logEntity.getTimeStamp(), CommonConstant.DAY_PATTERN);
         if (logEntity.getRelatedLabels().length == 0) {
+            return false;
+        }
+        if(logEntity.getId() == null || Strings.isEmpty(logEntity.getId())) {
             return false;
         }
         List<Integer> labels = new ArrayList<>();
