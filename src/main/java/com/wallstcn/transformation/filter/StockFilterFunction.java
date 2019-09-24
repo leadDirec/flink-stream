@@ -22,27 +22,57 @@ public class StockFilterFunction implements FilterFunction<LogEntity> {
         List<Integer> labels = new ArrayList<>();
         List<Integer> actions = new ArrayList<>();
         for (Integer label : logEntity.getRelatedLabels()) {
-            String key = Keys.getUserArticleActionKeys(logEntity.getUserId(),day,label);
-            RedisPool.get().hincrBy(key, String.valueOf(logEntity.getAction()),1);
-            Long ret = RedisPool.get().hincrBy( Keys.getUserLabelDatealKeys(logEntity.getUserId(),label),String.valueOf(logEntity.getAction()),1);
+            String key = Keys.getUserArticleActionStockKeys(logEntity.getUserId(),day,label);
+            Long symbolCount = RedisPool.get().hincrBy(key, logEntity.getId()+"_"+logEntity.getAction(),1);
+            if (symbolCount != 1 && !symbolCount.equals( ActionConstant.StockAction.BrowseStocksFrequencyCount)) {
+                continue;
+            }
             if (logEntity.getAction() == ActionConstant.StockAction.BrowseStocksAction) {
-                if (ret == 1) {
-                    actions.add(ActionConstant.StockAction.BrowseStocksAction);
-                    labels.add(label);
+                Long ret = RedisPool.get().hincrBy( Keys.getUserLabelDatealStockKeys(logEntity.getUserId(),label),logEntity.getId()+"_"+logEntity.getAction(),1);
+                if (symbolCount == 1) { //浏览股票
+                    if (ret.equals(1)) {
+                        actions.add(ActionConstant.StockAction.BrowseStocksAction);
+                        labels.add(label);
+                    }
                 }
-                if (ret.equals(ActionConstant.StockAction.BrowseStocksFrequencyCount)) {
-                    actions.add(ActionConstant.StockAction.BrowseStocksFrequencyAction);
-                    labels.add(label);
+                if (symbolCount.equals( ActionConstant.StockAction.BrowseStocksFrequencyCount)) { //频繁浏览股票
+                    if (ret.equals(ActionConstant.StockAction.BrowseStocksFrequencyCount))  {
+                        actions.add(ActionConstant.StockAction.BrowseStocksFrequencyAction);
+                        labels.add(label);
+                    }
                 }
             } else {
-//                if (!RedisPool.get().getbit(Keys.getUserActionDuplicateKeys(logEntity.getUserId(),label),logEntity.getAction() % 3000)) {
-//                    RedisPool.get().setbit(Keys.getUserActionDuplicateKeys(logEntity.getUserId(),label),logEntity.getAction() % 3000,true);
-//                    labels.add(label); //5天一次
-//                }
-                if (ret == 1) {
-                    labels.add(label);
+                if (symbolCount == 1) {
+                    Long ret = RedisPool.get().hincrBy( Keys.getUserLabelDatealStockKeys(logEntity.getUserId(),label),logEntity.getId()+"_"+logEntity.getAction(),1);
+                    if (ret.equals(1)) {
+                        labels.add(label);
+                        actions.add(logEntity.getAction());
+                    }
                 }
             }
+
+//            String key = Keys.getUserArticleActionKeys(logEntity.getUserId(),day,label);
+//            RedisPool.get().hincrBy(key, String.valueOf(logEntity.getAction()),1);
+//            Long ret = RedisPool.get().hincrBy( Keys.getUserLabelDatealKeys(logEntity.getUserId(),label),String.valueOf(logEntity.getAction()),1);
+//            if (logEntity.getAction() == ActionConstant.StockAction.BrowseStocksAction) {
+//                if (ret == 1) {
+//                    actions.add(ActionConstant.StockAction.BrowseStocksAction);
+//                    labels.add(label);
+//                }
+//                if (ret.equals(ActionConstant.StockAction.BrowseStocksFrequencyCount)) {
+//                    actions.add(ActionConstant.StockAction.BrowseStocksFrequencyAction);
+//                    labels.add(label);
+//                }
+//            } else {
+////                if (!RedisPool.get().getbit(Keys.getUserActionDuplicateKeys(logEntity.getUserId(),label),logEntity.getAction() % 3000)) {
+////                    RedisPool.get().setbit(Keys.getUserActionDuplicateKeys(logEntity.getUserId(),label),logEntity.getAction() % 3000,true);
+////                    labels.add(label); //5天一次
+////                }
+//                if (ret == 1) {
+//                    labels.add(label);
+//                    actions.add(logEntity.getAction());
+//                }
+//            }
         }
         if (!labels.isEmpty()) {
             int[] strings = new int[labels.size()];

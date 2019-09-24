@@ -16,6 +16,28 @@ public class LogEntity implements Serializable {
     public Integer Action;
     public List<Integer> Actions;
     public int[] relatedLabels;
+    public String id;
+
+    @Override
+    public String toString() {
+        return "LogEntity{" +
+                "userId=" + userId +
+                ", timeStamp=" + timeStamp +
+                ", actionType='" + actionType + '\'' +
+                ", Action=" + Action +
+                ", Actions=" + Actions +
+                ", relatedLabels=" + Arrays.toString(relatedLabels) +
+                ", id='" + id + '\'' +
+                '}';
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
 
     public  List<Integer> getActions() {
         return Actions;
@@ -31,18 +53,6 @@ public class LogEntity implements Serializable {
 
     public void setRelatedLabels(int[] relatedLabels) {
         this.relatedLabels = relatedLabels;
-    }
-
-    @Override
-    public String toString() {
-        return "LogEntity{" +
-                "userId=" + userId +
-                ", timeStamp=" + timeStamp +
-                ", actionType='" + actionType + '\'' +
-                ", Action=" + Action +
-                ", Actions=" + Actions +
-                ", relatedLabels=" + Arrays.toString(relatedLabels) +
-                '}';
     }
 
     public String getActionType() {

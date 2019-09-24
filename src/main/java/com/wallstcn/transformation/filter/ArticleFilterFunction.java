@@ -1,5 +1,6 @@
 package com.wallstcn.transformation.filter;
 
+import com.wallstcn.common.ActionConstant;
 import com.wallstcn.common.CommonConstant;
 import com.wallstcn.models.LogEntity;
 import com.wallstcn.redis.Keys;
@@ -20,12 +21,24 @@ public class ArticleFilterFunction implements FilterFunction<LogEntity> {
         }
         List<Integer> labels = new ArrayList<>();
         for (Integer label : logEntity.getRelatedLabels()) {
-            String key = Keys.getUserArticleActionKeys(logEntity.getUserId(),day,label);
-            RedisPool.get().hincrBy(key, String.valueOf(logEntity.getAction()),1);
-            Long ret = RedisPool.get().hincrBy(Keys.getUserLabelDatealKeys(logEntity.getUserId(),label),String.valueOf(logEntity.getAction()),1);
-            if (ret == 1) { //当天第一次
+
+            String key = Keys.getUserArticleActionArticleKeys(logEntity.getUserId(),day,label);
+            Long articleCount = RedisPool.get().hincrBy(key, logEntity.getId()+"_"+logEntity.getAction(),1);
+            if (articleCount != 1) {
+                continue;
+            }
+            Long ret = RedisPool.get().hincrBy( Keys.getUserLabelDatealArticleKeys(logEntity.getUserId(),label),logEntity.getId()+"_"+logEntity.getAction(),1);
+            if (ret.equals(1)) {
                 labels.add(label);
             }
+
+
+//            String key = Keys.getUserArticleActionKeys(logEntity.getUserId(),day,label);
+//            RedisPool.get().hincrBy(key, String.valueOf(logEntity.getAction()),1);
+//            Long ret = RedisPool.get().hincrBy(Keys.getUserLabelDatealKeys(logEntity.getUserId(),label),String.valueOf(logEntity.getAction()),1);
+//            if (ret == 1) { //当天第一次
+//                labels.add(label);
+//            }
         }
         if (!labels.isEmpty()) {
             int[] strings = new int[labels.size()];
