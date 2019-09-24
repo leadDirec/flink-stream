@@ -20,9 +20,8 @@ public class FeaturesFilterFunction implements FilterFunction<LogEntity> {
         }
         List<Integer> labels = new ArrayList<>();
         for (Integer label : logEntity.getRelatedLabels()) {
-            String key = Keys.getUserArticleActionKeys(logEntity.getUserId(),day,label);
-            RedisPool.get().hincrBy(key, String.valueOf(logEntity.getAction()),1);
-            Long ret = RedisPool.get().hincrBy(Keys.getUserLabelDatealKeys(logEntity.getUserId(),label),String.valueOf(logEntity.getAction()),1);
+            RedisPool.get().hincrBy(Keys.getUserArticleActionKeys(logEntity.getUserId(),day,label), String.valueOf(logEntity.getAction()),1);
+            Double ret = RedisPool.get().zincrby(Keys.getUserLabelDatealKeys(logEntity.getUserId(),label),1,String.valueOf(logEntity.getAction()));
             if (ret == 1) { //当天第一次
                 labels.add(label);
             }

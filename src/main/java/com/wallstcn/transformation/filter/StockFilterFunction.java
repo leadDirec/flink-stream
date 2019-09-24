@@ -26,32 +26,22 @@ public class StockFilterFunction implements FilterFunction<LogEntity> {
         List<Integer> labels = new ArrayList<>();
         List<Integer> actions = new ArrayList<>();
         for (Integer label : logEntity.getRelatedLabels()) {
-            String key = Keys.getUserArticleActionStockKeys(logEntity.getUserId(),day,label);
-            Long symbolCount = RedisPool.get().hincrBy(key, logEntity.getId()+"_"+logEntity.getAction(),1);
-            if (symbolCount != 1 && !symbolCount.equals( ActionConstant.StockAction.BrowseStocksFrequencyCount)) {
-                continue;
-            }
+            RedisPool.get().hincrBy(Keys.getUserArticleActionStockKeys(logEntity.getUserId(),day,label), logEntity.getId()+"_"+logEntity.getAction(),1);
+//            Long ret = RedisPool.get().hincrBy( Keys.getUserLabelDatealStockKeys(logEntity.getUserId(),label),logEntity.getId()+"_"+logEntity.getAction(),1);
+            Double ret = RedisPool.get().zincrby( Keys.getUserLabelDatealStockKeys(logEntity.getUserId(),label),1,logEntity.getId()+"_"+logEntity.getAction());
             if (logEntity.getAction() == ActionConstant.StockAction.BrowseStocksAction) {
-                Long ret = RedisPool.get().hincrBy( Keys.getUserLabelDatealStockKeys(logEntity.getUserId(),label),logEntity.getId()+"_"+logEntity.getAction(),1);
-                if (symbolCount == 1) { //浏览股票
-                    if (ret.equals(1)) {
-                        actions.add(ActionConstant.StockAction.BrowseStocksAction);
-                        labels.add(label);
-                    }
+                if (ret.equals(1)) {//浏览股票
+                    actions.add(ActionConstant.StockAction.BrowseStocksAction);
+                    labels.add(label);
                 }
-                if (symbolCount.equals( ActionConstant.StockAction.BrowseStocksFrequencyCount)) { //频繁浏览股票
-                    if (ret.equals(ActionConstant.StockAction.BrowseStocksFrequencyCount))  {
-                        actions.add(ActionConstant.StockAction.BrowseStocksFrequencyAction);
-                        labels.add(label);
-                    }
+                if (ret.equals(ActionConstant.StockAction.BrowseStocksFrequencyCount))  { //频繁浏览股票
+                    actions.add(ActionConstant.StockAction.BrowseStocksFrequencyAction);
+                    labels.add(label);
                 }
             } else {
-                if (symbolCount == 1) {
-                    Long ret = RedisPool.get().hincrBy( Keys.getUserLabelDatealStockKeys(logEntity.getUserId(),label),logEntity.getId()+"_"+logEntity.getAction(),1);
-                    if (ret.equals(1)) {
-                        labels.add(label);
-                        actions.add(logEntity.getAction());
-                    }
+                if (ret.equals(1)) {
+                    labels.add(label);
+                    actions.add(logEntity.getAction());
                 }
             }
 
