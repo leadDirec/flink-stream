@@ -26,7 +26,7 @@ public class ArticleFilterFunction implements FilterFunction<LogEntity> {
         for (Integer label : logEntity.getRelatedLabels()) {
             RedisPool.get().hincrBy(Keys.getUserArticleActionArticleKeys(logEntity.getUserId(),day,label), logEntity.getId()+"_"+logEntity.getAction(),1);
             Double ret = RedisPool.get().zincrby( Keys.getUserLabelDatealArticleKeys(logEntity.getUserId(),label),1,logEntity.getId()+"_"+logEntity.getAction());
-            if (ret.equals(1)) {
+            if (ret == 1) {
                 labels.add(label);
             }
 

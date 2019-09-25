@@ -30,16 +30,16 @@ public class StockFilterFunction implements FilterFunction<LogEntity> {
 //            Long ret = RedisPool.get().hincrBy( Keys.getUserLabelDatealStockKeys(logEntity.getUserId(),label),logEntity.getId()+"_"+logEntity.getAction(),1);
             Double ret = RedisPool.get().zincrby( Keys.getUserLabelDatealStockKeys(logEntity.getUserId(),label),1,logEntity.getId()+"_"+logEntity.getAction());
             if (logEntity.getAction() == ActionConstant.StockAction.BrowseStocksAction) {
-                if (ret.equals(1)) {//浏览股票
+                if (ret == 1) {//浏览股票
                     actions.add(ActionConstant.StockAction.BrowseStocksAction);
                     labels.add(label);
                 }
-                if (ret.equals(ActionConstant.StockAction.BrowseStocksFrequencyCount))  { //频繁浏览股票
+                if (ret == ActionConstant.StockAction.BrowseStocksFrequencyCount.doubleValue())  { //频繁浏览股票
                     actions.add(ActionConstant.StockAction.BrowseStocksFrequencyAction);
                     labels.add(label);
                 }
             } else {
-                if (ret.equals(1)) {
+                if (ret == 1) {
                     labels.add(label);
                     actions.add(logEntity.getAction());
                 }
@@ -82,6 +82,11 @@ public class StockFilterFunction implements FilterFunction<LogEntity> {
 
     public static StockFilterFunction create() {
         return new StockFilterFunction();
+    }
+
+    public static void main(String[] args) {
+        Double a = 3.0;
+        System.out.println(a == ActionConstant.StockAction.BrowseStocksFrequencyCount.doubleValue());
     }
 
 }
