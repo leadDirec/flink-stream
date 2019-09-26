@@ -82,7 +82,7 @@
     <dependency>
       <groupId>org.apache.flink</groupId>
       <artifactId>flink-java</artifactId>
-      <version>1.7-SNAPSHOT</version>
+      <version>1.4.2</version>
       <scope>provided</scope>
       <exclusions>
         <exclusion>
@@ -102,7 +102,7 @@
     <dependency>
       <groupId>org.apache.flink</groupId>
       <artifactId>flink-streaming-java_2.11</artifactId>
-      <version>1.7-SNAPSHOT</version>
+      <version>1.4.2</version>
       <scope>provided</scope>
       <exclusions>
         <exclusion>
@@ -113,6 +113,14 @@
           <artifactId>flink-clients_2.11</artifactId>
           <groupId>org.apache.flink</groupId>
         </exclusion>
+        <exclusion>
+          <artifactId>org.apache.sling.commons.json</artifactId>
+          <groupId>org.apache.sling</groupId>
+        </exclusion>
+        <exclusion>
+          <artifactId>flink-core</artifactId>
+          <groupId>org.apache.flink</groupId>
+        </exclusion>
       </exclusions>
     </dependency>
   </dependencies>
@@ -120,7 +128,7 @@
     <java.version>1.8</java.version>
     <hbase.version>1.2.0</hbase.version>
     <scala.binary.version>2.11</scala.binary.version>
-    <flink.version>1.7-SNAPSHOT</flink.version>
+    <flink.version>1.4.2</flink.version>
     <maven.compiler.source>${java.version}</maven.compiler.source>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <maven.compiler.target>${java.version}</maven.compiler.target>
