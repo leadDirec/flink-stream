@@ -30,7 +30,7 @@ public class Property {
             logger.debug(">>>userportrait<<<资源文件加载失败!"+Property.getEnvConf(""));
             e.printStackTrace();
         }
-        logger.debug(">>>userportrait<<<资源文件加载成功"+Property.getEnvConf(""));
+        logger.error(">>>userportrait<<<资源文件加载成功"+Property.getEnvConf(envKey));
     }
 
 //    public static String getEnvConf(String jvmKey, String key) {
@@ -48,6 +48,7 @@ public class Property {
         }
 //        String env = System.getProperty(key);
         String env = System.getenv(key);
+        logger.error("System.getenv:::>>>>>>>>>>>>>>>>>>>>>>",env);
         if (StringUtils.isEmpty(env)) {
             return "local".concat(CONF_NAME);
         }
@@ -55,6 +56,7 @@ public class Property {
     }
 
     public static String getValue(String key) {
+        logger.error("getValue>>>>>>>>>>>>>"+key+">>>>>>>>>>>>>>>>"+contextProperties.getProperty(key));
         return contextProperties.getProperty(key);
     }
 

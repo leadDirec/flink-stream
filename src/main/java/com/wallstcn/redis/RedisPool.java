@@ -30,6 +30,7 @@ public class RedisPool extends ConnectionPoolBase<Jedis> implements ConnectionPo
         config.setMaxWaitMillis(Property.getIntValue("redis.pool.maxWait"));
         config.setTestOnBorrow(Property.getBooleanValue("redis.pool.testOnBorrow"));
         config.setTestOnReturn(Property.getBooleanValue("redis.pool.testOnReturn"));
+        logger.error("JedisPoolConfig:::"+Property.getValue("redis.host")+">>>"+Property.getIntValue("redis.port")+">>>>"+Property.getIntValue("redis.timeout")+">>>>"+Property.getValue("redis.auth"));
         pool = new RedisPool(config,Property.getValue("redis.host"),Property.getIntValue("redis.port"),Property.getIntValue("redis.timeout"),Property.getValue("redis.auth"));
         logger.debug("RedisPool initial success");
     }
