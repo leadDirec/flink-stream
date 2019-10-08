@@ -46,8 +46,8 @@ public class Property {
         if (StringUtils.isEmpty(key)) {
             key = envKey;
         }
-//        String env = System.getProperty(key);
-        String env = System.getenv(key);
+        String env = System.getProperty(key);
+//        String env = System.getenv(key);
         logger.error("System.getenv:::>>>>>>>>>>>>>>>>>>>>>>["+env+"]");
         if (StringUtils.isEmpty(env)) {
             return "local".concat(CONF_NAME);
