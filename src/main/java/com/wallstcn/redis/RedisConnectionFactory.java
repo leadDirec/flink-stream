@@ -36,7 +36,7 @@ public class RedisConnectionFactory   implements ConnectionFactory<Jedis> {
      * <p>Description: 构造方法</p>
      */
     public RedisConnectionFactory(final String host, final int port, final int timeOut,final String auth) {
-        logger.error("RedisConnectionFactory:::"+host+">>>"+port+">>>>"+auth);
+//        logger.error("RedisConnectionFactory:::"+host+">>>"+port+">>>>"+auth);
         this.jedisConfig = new JedisConfig();
         this.jedisConfig.setHost(host);
         this.jedisConfig.setPort(port);
