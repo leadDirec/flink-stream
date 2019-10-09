@@ -82,7 +82,7 @@ public class ActionConstant {
         public static final int BrowseSectionPage = 4008;//浏览板块页
         public static final Double BrowseSectionPageScore = 5.0;
 
-        public static final int SearchSectionPage = 4009;//浏览板块页
+        public static final int SearchSectionPage = 4009;//搜索板块页
         public static final Double SearchSectionPageScore = 5.0;
 
         public static final int HavePurchasedIndustryLabelPaymentColumn = 4010;//曾购买过行业标签付费栏目
