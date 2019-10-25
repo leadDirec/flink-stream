@@ -50,6 +50,13 @@ under the License.
 	</repositories>
 
 	<dependencies>
+		<!--Mysql JDBC Driver-->
+		<dependency>
+			<groupId>mysql</groupId>
+			<artifactId>mysql-connector-java</artifactId>
+			<version>5.1.47</version>
+		</dependency>
+
 		<!-- Apache Flink dependencies -->
 		<!-- These dependencies are provided, because they should not be packaged into the JAR file. -->
 		<dependency>

@@ -6,14 +6,18 @@ import com.wallstcn.transformation.LogEntityMapFuntion;
 import com.wallstcn.transformation.filter.ArticleFilterFunction;
 import com.wallstcn.transformation.filter.FeaturesFilterFunction;
 import com.wallstcn.transformation.filter.StockFilterFunction;
-import com.wallstcn.transformation.map.ArticleMapFuntion;
-import com.wallstcn.transformation.map.FeaturesMapFuntion;
-import com.wallstcn.transformation.map.StockMapFuntion;
+import com.wallstcn.transformation.map.*;
+import com.wallstcn.transformation.source.MysqlSource;
 import com.wallstcn.util.Property;
 import org.apache.flink.api.common.serialization.SimpleStringSchema;
 import org.apache.flink.api.common.typeinfo.TypeInformation;
+import org.apache.flink.runtime.state.filesystem.FsStateBackend;
+import org.apache.flink.streaming.api.CheckpointingMode;
 import org.apache.flink.streaming.api.TimeCharacteristic;
+import org.apache.flink.streaming.api.datastream.DataStream;
+import org.apache.flink.streaming.api.datastream.DataStreamSource;
 import org.apache.flink.streaming.api.datastream.SingleOutputStreamOperator;
+import org.apache.flink.streaming.api.environment.CheckpointConfig;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 import org.apache.flink.streaming.api.functions.ProcessFunction;
 import org.apache.flink.streaming.connectors.kafka.FlinkKafkaConsumer010;
@@ -21,6 +25,8 @@ import org.apache.flink.util.Collector;
 import org.apache.flink.util.OutputTag;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.Map;
 
 public class UserPortrait {
 
@@ -63,7 +69,12 @@ public class UserPortrait {
 
 //        env.setStateBackend(new RocksDBStateBackend(Property.getValue("state.checkpoints.dir"), true).getCheckpointBackend());
 
-//        env.setStateBackend(new FsStateBackend(Property.getValue("state.checkpoints.dir"),true));
+        env.setStateBackend(new FsStateBackend(Property.getValue("state.checkpoints.dir"),true));
+        CheckpointConfig checkpointConfig = env.getCheckpointConfig();
+        checkpointConfig.setCheckpointInterval(60 * 1000);
+        checkpointConfig.setCheckpointingMode(CheckpointingMode.EXACTLY_ONCE);
+        checkpointConfig.enableExternalizedCheckpoints(CheckpointConfig.ExternalizedCheckpointCleanup.RETAIN_ON_CANCELLATION);
+        //3、Kafka事
         env.setStreamTimeCharacteristic(TimeCharacteristic.EventTime);
 
         FlinkKafkaConsumer010<String> consumer = new FlinkKafkaConsumer010<>(Property.getKafkaTopics(), new SimpleStringSchema(), Property.getKafkaProperties());
@@ -74,6 +85,28 @@ public class UserPortrait {
 //        specificStartOffsets.put(new KafkaTopicPartition("myTopic", 0), 23L);
 //        specificStartOffsets.put(new KafkaTopicPartition("myTopic", 1), 31L);
 //        specificStartOffsets.put(new KafkaTopicPartition("myTopic", 2), 43L);
+
+        //mysql配置流
+        //配置流配置
+        String fromMysqlHost = Property.getValue("fromMysql.host");
+        int fromMysqlPort = Property.getIntValue("fromMysql.port");
+        String fromMysqlDB =  Property.getValue("fromMysql.db");
+        String fromMysqlUser =  Property.getValue("fromMysql.user");
+        String fromMysqlPasswd =  Property.getValue("fromMysql.passwd");
+        int fromMysqlSecondInterval = Property.getIntValue("fromMysql.secondInterval");
+
+        DataStreamSource<Map<Integer,Double>>  configStream = env.addSource(new MysqlSource(fromMysqlHost,fromMysqlPort,fromMysqlDB,fromMysqlUser,fromMysqlPasswd,fromMysqlSecondInterval)).setParallelism(1);
+        /*
+          (1) 先建立MapStateDescriptor
+          MapStateDescriptor定义了状态的名称、Key和Value的类型。
+          这里，MapStateDescriptor中，key是Void类型，value是Map<String, Tuple2<String,Int>>类型。
+         */
+//        MapStateDescriptor<Void,Map<Integer,Double>> configDescriptor = new MapStateDescriptor<>("config", BasicTypeInfo.VOID_TYPE_INFO,new MapTypeInfo<Integer,Double>(TypeInformation.of(Integer.class),TypeInformation.of(Double.class)));
+        /*
+          (2) 将配置流广播，形成BroadcastStream
+       */
+        DataStream<Map<Integer,Double>> broadcastStream = configStream.<Map<Integer,Double>>broadcast();
+
 
         Integer parallelism = Property.getIntValue("kafka.consume.parallelism");
         //TODO 细化 多次分流
@@ -129,13 +162,19 @@ public class UserPortrait {
 
         stream.getSideOutput(stocks).keyBy("userId")
                 .filter(StockFilterFunction.create()).setParallelism(5)
-                .map(StockMapFuntion.create()).setParallelism(5);
+                .connect(broadcastStream)
+//                .map(StockMapFuntion.create()).setParallelism(5);
+                .map(StockCoMapFuntion.create()).setParallelism(5);
         stream.getSideOutput(articles).keyBy("userId")
                 .filter(ArticleFilterFunction.create()).setParallelism(5)
-                .map(ArticleMapFuntion.create()).setParallelism(5);
+                .connect(broadcastStream)
+//                .map(ArticleMapFuntion.create()).setParallelism(5);
+                .map(ArticleCoMapFuntion.create()).setParallelism(5);
         stream.getSideOutput(features).keyBy("userId")
                 .filter(FeaturesFilterFunction.create()).setParallelism(5)
-                .map(FeaturesMapFuntion.create()).setParallelism(5);
+                .connect(broadcastStream)
+//                .map(FeaturesMapFuntion.create()).setParallelism(5);
+                .map(FeaturesCoMapFuntion.create()).setParallelism(5);
 
 //        DataStream<String> transction = env.addSource(consumer).setParallelism(parallelism);
 //        transction.map(new LogEntityMapFuntion()).setParallelism(parallelism)
