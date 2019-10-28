@@ -56,7 +56,7 @@ public class Property {
     }
 
     public static String getValue(String key) {
-//        logger.error("getValue>>>>>>>>>>>>>"+key+">>>>>>>>>>>>>>>>"+contextProperties.getProperty(key));
+        logger.error("getValue>>>>>>>>>>>>>"+key+">>>>>>>>>>>>>>>>"+contextProperties.getProperty(key));
         return contextProperties.getProperty(key);
     }
 

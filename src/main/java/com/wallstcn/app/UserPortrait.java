@@ -6,7 +6,9 @@ import com.wallstcn.transformation.LogEntityMapFuntion;
 import com.wallstcn.transformation.filter.ArticleFilterFunction;
 import com.wallstcn.transformation.filter.FeaturesFilterFunction;
 import com.wallstcn.transformation.filter.StockFilterFunction;
-import com.wallstcn.transformation.map.*;
+import com.wallstcn.transformation.map.ArticleCoMapFuntion;
+import com.wallstcn.transformation.map.FeaturesCoMapFuntion;
+import com.wallstcn.transformation.map.StockCoMapFuntion;
 import com.wallstcn.transformation.source.MysqlSource;
 import com.wallstcn.util.Property;
 import org.apache.flink.api.common.serialization.SimpleStringSchema;
@@ -69,11 +71,13 @@ public class UserPortrait {
 
 //        env.setStateBackend(new RocksDBStateBackend(Property.getValue("state.checkpoints.dir"), true).getCheckpointBackend());
 
+//        env.enableCheckpointing(60 * 1000);
         env.setStateBackend(new FsStateBackend(Property.getValue("state.checkpoints.dir"),true));
         CheckpointConfig checkpointConfig = env.getCheckpointConfig();
         checkpointConfig.setCheckpointInterval(60 * 1000);
         checkpointConfig.setCheckpointingMode(CheckpointingMode.EXACTLY_ONCE);
-        checkpointConfig.enableExternalizedCheckpoints(CheckpointConfig.ExternalizedCheckpointCleanup.RETAIN_ON_CANCELLATION);
+        //表示一旦Flink处理程序被cancel后，会保留Checkpoint数据，以便根据实际需要恢复到指定的Checkpoint
+//        checkpointConfig.enableExternalizedCheckpoints(CheckpointConfig.ExternalizedCheckpointCleanup.RETAIN_ON_CANCELLATION);
         //3、Kafka事
         env.setStreamTimeCharacteristic(TimeCharacteristic.EventTime);
 

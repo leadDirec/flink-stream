@@ -1,5 +1,6 @@
 package com.wallstcn.transformation.map;
 
+import com.wallstcn.common.ActionConstant;
 import com.wallstcn.models.LogEntity;
 import com.wallstcn.redis.Keys;
 import com.wallstcn.redis.RedisPool;
@@ -17,9 +18,21 @@ public class StockCoMapFuntion extends BaseCoMapFuntion {
         for (int i =0;i<logEntity.getRelatedLabels().length;i++) {
             Integer action = logEntity.getActions().get(i);
             Double score = getConfig().get(action);
-            if (score == 0) {
+            if (score == null || score == 0) {
                 logger.error("score StockCoMapFuntion >>>>>>>>>>>> data  empty");
-                return null;
+                switch (action) {
+                    case ActionConstant.StockAction.BrowseStocksAction:
+                        score = ActionConstant.StockAction.BrowseStocksActionScore;
+                        break;
+                    case ActionConstant.StockAction.BrowseStocksFrequencyAction:
+                        score = ActionConstant.StockAction.BrowseStocksFrequencyActionScore;
+                        break;
+                    case ActionConstant.StockAction.SearchStocksAction:
+                        score = ActionConstant.StockAction.SearchStocksActionScore;
+                        break;
+                    default:
+                        return null;
+                }
             }
             String key = Keys.getUserLabelActionScore(logEntity.getUserId(),logEntity.getRelatedLabels()[i]);
             RedisPool.get().incrByFloat(key,score);
