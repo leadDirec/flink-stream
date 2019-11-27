@@ -4,7 +4,6 @@ import com.wallstcn.common.ActionConstant;
 import com.wallstcn.models.LogEntity;
 import com.wallstcn.redis.Keys;
 import com.wallstcn.redis.RedisPool;
-import com.wallstcn.util.JacksonUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -14,7 +13,7 @@ public class ArticleCoMapFuntion extends BaseCoMapFuntion {
 
     @Override
     public Void map1(LogEntity logEntity) throws Exception {
-        logger.error("score ArticleCoMapFuntion >>>>>>>>>>>>"+JacksonUtils.toJson(getConfig()));
+//        logger.error("score ArticleCoMapFuntion >>>>>>>>>>>>"+JacksonUtils.toJson(getConfig()));
         Double score =  getConfig().get(logEntity.getAction());
         if (score == null || score == 0) {
             logger.error("score ArticleCoMapFuntion >>>>>>>>>>>> data  empty");
